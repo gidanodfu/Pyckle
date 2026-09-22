@@ -1,0 +1,16 @@
+# =============================================================================
+# Pyckle - prueba de escalado horizontal (2+ réplicas) sobre el stack de DESARROLLO
+#
+# Reutiliza docker-compose.yml y libera el puerto host del backend para poder
+# escalar. Uso:
+#   docker compose -f docker-compose.yml -f docker-compose.scale.yml up -d --scale backend=2
+#
+# Nginx (nginx.dev.conf) re-resuelve `backend` por DNS de Docker y reparte
+# entre las réplicas. PostgreSQL, Redis y el volumen `media_data` son compartidos.
+# =============================================================================
+name: pyckle
+
+services:
+  backend:
+    # Sin puerto host: varias réplicas no colisionan en 127.0.0.1:8000.
+    ports: !reset []

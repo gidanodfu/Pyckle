@@ -1,0 +1,135 @@
+# =============================================================================
+# Pyckle - entorno de DESARROLLO
+#   docker compose up -d
+# Postgres y Redis NO se exponen a Internet; solo a 127.0.0.1 para depuracion.
+# =============================================================================
+name: pyckle
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    # En una red `internal` Docker no publica puertos: `edge` habilita el
+    # binding 127.0.0.1 (solo depuracion local).
+    networks:
+      - internal
+      - edge
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "127.0.0.1:${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    networks:
+      - internal
+      - edge
+
+  backend:
+    image: pyckle-backend:dev
+    build:
+      context: ./backend
+      target: dev
+    restart: unless-stopped
+    # En desarrollo se ejecuta como root para escribir en el bind mount del host
+    # (migraciones autogeneradas y media local). Produccion usa usuario no root.
+    user: root
+    env_file:
+      - .env
+      - .env.dev   # overrides locales de desarrollo (ignorado por Git)
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      REDIS_URL: redis://redis:6379/0
+      # Solo Nginx (red interna) puede fijar X-Real-IP.
+      TRUSTED_PROXIES: ${TRUSTED_PROXIES:-172.16.0.0/12,10.0.0.0/8,127.0.0.1/32,::1/128}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      # Backend solo en loopback: se consume vía Nginx, no directo desde la red.
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - ./backend:/app
+      - media_data:/app/media
+    command:
+      - sh
+      - -c
+      - "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://localhost:8000${API_V1_PREFIX:-/api/v1}/health').status==200 else 1)"
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 40s
+    networks:
+      - internal
+      - edge
+
+  frontend:
+    image: pyckle-frontend:dev
+    build:
+      context: ./frontend
+      target: dev
+    restart: unless-stopped
+    environment:
+      VITE_API_BASE_URL: ${VITE_API_BASE_URL:-/api/v1}
+      VITE_BACKEND_URL: http://backend:8000
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      backend:
+        condition: service_started
+    networks:
+      - edge
+
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./infra/nginx/nginx.dev.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - edge
+
+volumes:
+  postgres_data:
+  redis_data:
+  media_data:
+
+networks:
+  internal:
+    internal: true
+  edge:

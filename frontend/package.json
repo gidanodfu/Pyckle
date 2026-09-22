@@ -1,0 +1,22 @@
+{
+  "name": "pyckle-frontend",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0 --port 4173",
+    "test": "node --test src/lib/*.test.js",
+    "test:dom": "npm run build && node --test tests/*.test.mjs"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.0.0",
+    "lucide": "^0.468.0",
+    "tailwindcss": "^4.0.0"
+  },
+  "devDependencies": {
+    "happy-dom": "^20.14.5",
+    "vite": "^6.0.0"
+  }
+}

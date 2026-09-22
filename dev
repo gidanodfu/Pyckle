@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# Wrapper sin dependencias para los comandos del Makefile.
+# Uso: ./dev <target> [args]   (equivalente a `make <target>`)
+set -euo pipefail
+
+COMPOSE="docker compose"
+COMPOSE_PROD="docker compose -f docker-compose.prod.yml"
+BACKEND="$COMPOSE exec -T backend"
+
+cmd="${1:-help}"
+shift || true
+
+case "$cmd" in
+  help)
+    grep -hE '^[a-zA-Z_-]+:.*?## ' Makefile | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-16s\033[0m %s\n", $1, $2}'
+    ;;
+  up)         $COMPOSE up -d --build ;;
+  down)       $COMPOSE down ;;
+  build)      $COMPOSE build ;;
+  rebuild)    $COMPOSE build --no-cache ;;
+  restart)    $COMPOSE restart ;;
+  ps)         $COMPOSE ps ;;
+  logs)       $COMPOSE logs -f --tail=200 ;;
+  migrate)    $BACKEND alembic upgrade head ;;
+  revision)   $BACKEND alembic revision --autogenerate -m "${1:?falta mensaje}" ;;
+  downgrade)  $BACKEND alembic downgrade "${1:--1}" ;;
+  seed)       $BACKEND python -m app.db.seed ;;
+  test)       $BACKEND pytest -q ;;
+  lint)       $BACKEND ruff check app tests migrations && $BACKEND ruff format --check app tests migrations ;;
+  format)     $BACKEND ruff format app tests migrations && $BACKEND ruff check --fix app tests migrations ;;
+  shell)      $COMPOSE exec backend sh ;;
+  db-shell)   $COMPOSE exec postgres psql -U "${POSTGRES_USER:-pyckle}" -d "${POSTGRES_DB:-pyckle}" ;;
+  redis-cli)  $COMPOSE exec redis redis-cli ;;
+  prod-build) $COMPOSE_PROD build ;;
+  prod-up)    $COMPOSE_PROD up -d --build ;;
+  prod-down)  $COMPOSE_PROD down ;;
+  prod-logs)  $COMPOSE_PROD logs -f --tail=200 ;;
+  clean)      $COMPOSE down -v --remove-orphans ;;
+  *)
+    echo "Target desconocido: $cmd" >&2
+    echo "Prueba: ./dev help" >&2
+    exit 1
+    ;;
+esac

@@ -1,0 +1,36 @@
+# Env / secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+infra/certs/
+infra/cloudflare/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.egg-info/
+build/
+dist/
+
+# Node
+node_modules/
+frontend/dist/
+.vite/
+
+# Media / uploads (solo el volumen de subidas, no dominios de código como
+# backend/app/domains/media)
+/media/
+backend/media/
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/
+*.log

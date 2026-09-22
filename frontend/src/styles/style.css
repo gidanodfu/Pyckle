@@ -1,0 +1,293 @@
+@import "tailwindcss";
+
+@theme {
+  /* Pila del sistema: la apariencia actual de Pyckle (no se cargaba ninguna
+     fuente, así que "Inter" no tenía efecto). Sin dependencias externas. */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+}
+
+/* App shell: navbar + main + footer. El main ocupa el espacio restante y el
+   footer queda al final del viewport cuando el contenido es corto. */
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#view {
+  flex: 1 0 auto;
+  min-width: 0;
+}
+
+.field-input {
+  width: 100%;
+  border-radius: 0.5rem;
+  /* Borde en reposo >= 3:1 sobre la superficie (contraste no textual). */
+  border: 1px solid var(--color-slate-500);
+  background-color: white;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.field-input:focus {
+  border-color: var(--color-blue-600);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-blue-600) 20%, transparent);
+}
+.field-input:disabled {
+  background-color: var(--color-slate-100);
+  cursor: not-allowed;
+}
+/* El padding derecho de `pr-11` (utilidad en capa de Tailwind) debe ganar al
+   shorthand de `.field-input` (CSS sin capa), usado por `passwordInput`. */
+.field-input.pr-11 {
+  padding-right: 2.75rem;
+}
+
+/* Oculta la scrollbar nativa sin desactivar el desplazamiento (wheel, trackpad,
+   touch y teclado siguen funcionando). Solo para contenedores donde la barra no
+   aporta información; no usar de forma global. */
+.scrollbar-hidden {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-hidden::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.skeleton {
+  animation: pyckle-pulse 1.5s ease-in-out infinite;
+  background-color: var(--color-slate-200);
+  border-radius: 0.375rem;
+}
+@keyframes pyckle-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+svg.lucide {
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   Tema oscuro
+   Mismo sistema de diseño, no una inversión. Los colores se remapean por
+   familia para conservar la jerarquía y la identidad (acento azul, semánticos
+   reconocibles). Se evita el negro absoluto: superficies slate.
+   ========================================================================== */
+
+html.dark {
+  color-scheme: dark;
+}
+
+/* Texto de foco (ring-offset) acorde a la superficie en cada tema. */
+:root {
+  --pyckle-surface: #ffffff;
+}
+.dark {
+  --pyckle-surface: #0f172a;
+  --tw-ring-offset-color: #0f172a;
+}
+
+/* Superficies */
+.dark .bg-white {
+  background-color: var(--color-slate-900);
+}
+.dark .bg-white\/95 {
+  background-color: color-mix(in srgb, var(--color-slate-900) 95%, transparent);
+}
+.dark .bg-slate-50 {
+  background-color: #0b1220;
+}
+.dark .bg-slate-100 {
+  background-color: var(--color-slate-800);
+}
+.dark .bg-slate-200 {
+  background-color: var(--color-slate-700);
+}
+.dark .bg-slate-400 {
+  background-color: var(--color-slate-500);
+}
+.dark .disabled\:bg-slate-100:disabled {
+  background-color: var(--color-slate-800);
+}
+.dark .hover\:bg-slate-50:hover,
+.dark .hover\:bg-slate-100:hover {
+  background-color: var(--color-slate-800);
+}
+
+/* Tintes semánticos (badges, alertas, chips) */
+.dark .bg-blue-50 {
+  background-color: #172554;
+}
+.dark .bg-blue-100 {
+  background-color: #1e3a8a;
+}
+.dark .bg-emerald-50 {
+  background-color: #022c22;
+}
+.dark .bg-emerald-100 {
+  background-color: #064e3b;
+}
+.dark .bg-red-50,
+.dark .hover\:bg-red-50:hover {
+  background-color: #450a0a;
+}
+.dark .bg-red-100 {
+  background-color: #7f1d1d;
+}
+.dark .bg-amber-50 {
+  background-color: #451a03;
+}
+.dark .bg-amber-100 {
+  background-color: #78350f;
+}
+.dark .bg-cyan-100 {
+  background-color: #164e63;
+}
+.dark .bg-indigo-100 {
+  background-color: #312e81;
+}
+.dark .bg-violet-100 {
+  background-color: #4c1d95;
+}
+
+/* Texto */
+.dark .text-slate-900 {
+  color: var(--color-slate-50);
+}
+.dark .text-slate-800 {
+  color: var(--color-slate-100);
+}
+.dark .text-slate-700 {
+  color: var(--color-slate-200);
+}
+.dark .text-slate-600 {
+  color: var(--color-slate-300);
+}
+.dark .text-slate-500,
+.dark .text-slate-400 {
+  color: var(--color-slate-400);
+}
+.dark .text-slate-300 {
+  color: var(--color-slate-500);
+}
+.dark .hover\:text-slate-900:hover {
+  color: var(--color-slate-50);
+}
+.dark .text-blue-700,
+.dark .hover\:text-blue-700:hover {
+  color: #93c5fd;
+}
+.dark .text-blue-800 {
+  color: #bfdbfe;
+}
+.dark .text-blue-900,
+.dark .hover\:text-blue-900:hover {
+  color: #dbeafe;
+}
+.dark .text-emerald-700 {
+  color: #6ee7b7;
+}
+.dark .text-emerald-800 {
+  color: #a7f3d0;
+}
+.dark .text-red-600 {
+  color: #f87171;
+}
+.dark .text-red-700 {
+  color: #fca5a5;
+}
+.dark .text-red-800 {
+  color: #fecaca;
+}
+.dark .text-amber-500 {
+  color: #fbbf24;
+}
+.dark .text-amber-600,
+.dark .text-amber-700 {
+  color: #fcd34d;
+}
+.dark .text-amber-800 {
+  color: #fde68a;
+}
+.dark .text-cyan-700 {
+  color: #67e8f9;
+}
+.dark .text-cyan-800 {
+  color: #a5f3fc;
+}
+.dark .text-indigo-800 {
+  color: #c7d2fe;
+}
+.dark .text-violet-800 {
+  color: #ddd6fe;
+}
+
+/* Bordes y divisores */
+.dark .border-slate-100,
+.dark .border-slate-200,
+.dark .divide-slate-100,
+.dark .divide-slate-200 {
+  border-color: var(--color-slate-800);
+}
+.dark .border-slate-300 {
+  border-color: var(--color-slate-500);
+}
+.dark .border-blue-200 {
+  border-color: #1e3a8a;
+}
+.dark .border-blue-300 {
+  border-color: #1d4ed8;
+}
+.dark .border-blue-500 {
+  border-color: #3b82f6;
+}
+.dark .border-emerald-200 {
+  border-color: #065f46;
+}
+.dark .border-amber-200 {
+  border-color: #92400e;
+}
+.dark .border-red-200 {
+  border-color: #991b1b;
+}
+.dark .border-red-400 {
+  border-color: #dc2626;
+}
+
+/* Inputs */
+.dark .field-input {
+  background-color: var(--color-slate-900);
+  border-color: var(--color-slate-500);
+  color: var(--color-slate-100);
+}
+.dark .field-input:focus {
+  border-color: var(--color-blue-400);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-blue-400) 25%, transparent);
+}
+.dark .field-input:disabled {
+  background-color: var(--color-slate-800);
+  color: var(--color-slate-500);
+}
+.dark .field-input::placeholder {
+  color: var(--color-slate-500);
+}
+.dark .skeleton {
+  background-color: var(--color-slate-800);
+}
