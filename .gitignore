@@ -24,6 +24,9 @@ node_modules/
 frontend/dist/
 .vite/
 
+# E2E (Playwright)
+e2e/artifacts/
+
 # Media / uploads (solo el volumen de subidas, no dominios de código como
 # backend/app/domains/media)
 /media/

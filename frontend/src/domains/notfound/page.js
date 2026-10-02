@@ -28,9 +28,9 @@ export function NotFound() {
   return h(
     "div",
     { class: "flex flex-col items-center justify-center gap-3 px-4 py-20 text-center" },
-    h("span", { class: "flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 text-slate-500" }, icon("search", { size: 26 })),
-    h("h1", { class: "text-2xl font-bold text-slate-900" }, "Página no encontrada"),
-    h("p", { class: "max-w-md text-sm text-slate-500" }, "La ruta que buscas no existe o fue movida."),
+    h("span", { class: "flex h-14 w-14 items-center justify-center rounded-full bg-surface-hover text-muted" }, icon("search", { size: 26 })),
+    h("h1", { class: "text-2xl font-bold text-foreground" }, "Página no encontrada"),
+    h("p", { class: "max-w-md text-sm text-muted" }, "La ruta que buscas no existe o fue movida."),
     button("Volver al inicio", { iconName: "home", onClick: () => navigate(routes.home) }),
   );
 }

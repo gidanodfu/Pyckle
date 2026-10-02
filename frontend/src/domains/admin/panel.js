@@ -42,12 +42,12 @@ export async function AdminPanel() {
         ? items.map((specialty) =>
             h(
               "div",
-              { class: "flex items-center justify-between rounded-lg border border-slate-200 px-3 py-2" },
+              { class: "flex flex-wrap items-center justify-between gap-2 rounded-lg border border-border px-3 py-2" },
               h(
                 "div",
                 {},
-                h("p", { class: "text-sm font-medium text-slate-800" }, specialty.name),
-                h("p", { class: "text-xs text-slate-500" }, specialty.description || ""),
+                h("p", { class: "text-sm font-medium text-foreground" }, specialty.name),
+                h("p", { class: "text-xs text-muted" }, specialty.description || ""),
               ),
               h(
                 "div",
@@ -66,7 +66,7 @@ export async function AdminPanel() {
                     }),
                 }),
                 button("Eliminar", {
-                  variant: "danger",
+                  variant: "danger-ghost",
                   iconName: "trash-2",
                   onClick: (event) =>
                     withBusy(event.currentTarget, async () => {
@@ -113,14 +113,14 @@ export async function AdminPanel() {
     ...technicians.items.map((technician) =>
       h(
         "div",
-        { class: "flex items-center justify-between rounded-lg border border-slate-200 px-3 py-2" },
+        { class: "flex items-center justify-between rounded-lg border border-border px-3 py-2" },
         h(
           "div",
           {},
-          h("p", { class: "text-sm font-medium text-slate-800" }, technician.full_name),
+          h("p", { class: "text-sm font-medium text-foreground" }, technician.full_name),
           h(
             "p",
-            { class: "text-xs text-slate-500" },
+            { class: "text-xs text-muted" },
             `${technician.experience_years} años · ${Number(technician.rating_avg).toFixed(1)}/5${
               technician.district_name ? ` · ${technician.district_name}` : ""
             }`,
@@ -150,28 +150,28 @@ export async function AdminPanel() {
     pageHeader("Panel administrativo", "Estadísticas, moderación y administración del marketplace."),
     h(
       "div",
-      { class: "mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4" },
+      { class: "mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4" },
       statCard("Usuarios", stats.total_users, { iconName: "users" }),
       statCard("Técnicos", stats.total_technicians, { iconName: "wrench" }),
-      statCard("Solicitudes abiertas", stats.open_requests, { accent: "text-amber-700", iconName: "clipboard-list" }),
-      statCard("Ingresos", formatMoney(stats.total_revenue), { accent: "text-emerald-700", iconName: "circle-dollar-sign" }),
+      statCard("Solicitudes abiertas", stats.open_requests, { accent: "text-warning", iconName: "clipboard-list" }),
+      statCard("Ingresos", formatMoney(stats.total_revenue), { accent: "text-success", iconName: "circle-dollar-sign" }),
     ),
     h(
       "div",
-      { class: "mt-8 grid gap-6 lg:grid-cols-2" },
+      { class: "mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2" },
       card(
         h(
           "div",
-          { class: "flex items-center justify-between" },
-          h("h2", { class: "text-lg font-semibold text-slate-900" }, "Especialidades"),
+          { class: "flex flex-wrap items-center justify-between gap-2" },
+          h("h2", { class: "text-lg font-semibold text-foreground" }, "Especialidades"),
           button("Usuarios", { variant: "ghost", iconName: "users", onClick: () => navigate(routes.adminUsers) }),
         ),
         createForm,
         specialtyList,
       ),
-      card(h("h2", { class: "text-lg font-semibold text-slate-900" }, "Verificación de técnicos"), verifyBox),
+      card(h("h2", { class: "text-lg font-semibold text-foreground" }, "Verificación de técnicos"), verifyBox),
     ),
-    h("h2", { class: "mt-8 mb-3 text-lg font-semibold text-slate-900" }, "Solicitudes recientes"),
+    h("h2", { class: "mt-8 mb-3 text-lg font-semibold text-foreground" }, "Solicitudes recientes"),
     requests.items.length
       ? table(
           ["Título", "Cliente", { label: "Estado", align: "center" }, "Fecha", { label: "", align: "right" }],
@@ -186,8 +186,8 @@ export async function AdminPanel() {
       : emptyState("Sin solicitudes", "No hay solicitudes registradas."),
     h(
       "div",
-      { class: "mt-8 mb-3 flex items-center justify-between" },
-      h("h2", { class: "text-lg font-semibold text-slate-900" }, "Órdenes recientes"),
+      { class: "mt-8 mb-3 flex flex-wrap items-center justify-between gap-2" },
+      h("h2", { class: "text-lg font-semibold text-foreground" }, "Órdenes recientes"),
       button("Ver todas", {
         variant: "ghost",
         iconName: "receipt-text",

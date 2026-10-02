@@ -49,15 +49,15 @@ function requestRow(request) {
     "div",
     {
       class:
-        "flex flex-col gap-2 rounded-lg border border-slate-200 p-4 sm:flex-row sm:items-center sm:justify-between",
+        "flex flex-col gap-2 rounded-lg border border-border p-4 sm:flex-row sm:items-center sm:justify-between",
     },
     h(
       "div",
       {},
-      h("p", { class: "font-semibold text-slate-800" }, request.title),
+      h("p", { class: "font-semibold text-foreground" }, request.title),
       h(
         "p",
-        { class: "text-xs text-slate-500" },
+        { class: "text-xs text-muted" },
         `${request.specialty?.name || "General"} · ${formatDate(request.created_at)}${location ? ` · ${location}` : ""}`,
       ),
     ),
@@ -96,10 +96,10 @@ export async function TechnicianDashboard() {
             "li",
             {
               class:
-                "flex items-center justify-between rounded-lg border border-slate-200 px-3 py-2 text-sm",
+                "flex items-center justify-between rounded-lg border border-border px-3 py-2 text-sm",
             },
-            h("span", { class: "text-slate-700" }, item.name),
-            h("span", { class: "font-semibold text-slate-900" }, item.count),
+            h("span", { class: "text-foreground-secondary" }, item.name),
+            h("span", { class: "font-semibold text-foreground" }, item.count),
           ),
         ),
       )
@@ -120,10 +120,10 @@ export async function TechnicianDashboard() {
       "div",
       { class: "mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4" },
       statCard("Total reparaciones", summary.total, { iconName: "wrench" }),
-      statCard("En proceso", inProgress, { accent: "text-cyan-700", iconName: "hammer" }),
-      statCard("Esperando", waiting, { accent: "text-amber-700", iconName: "clock" }),
+      statCard("En proceso", inProgress, { accent: "text-info", iconName: "hammer" }),
+      statCard("Esperando", waiting, { accent: "text-warning", iconName: "clock" }),
       statCard("Completadas", byStatus.completed || 0, {
-        accent: "text-emerald-700",
+        accent: "text-success",
         iconName: "circle-check",
       }),
     ),
@@ -139,7 +139,7 @@ export async function TechnicianDashboard() {
         summary.pending_price_changes
           ? h(
               "p",
-              { class: "mt-4 text-sm text-amber-700" },
+              { class: "mt-4 text-sm text-warning" },
               `${summary.pending_price_changes} cambio(s) de precio esperando aprobación.`,
             )
           : null,
@@ -175,10 +175,10 @@ export async function TechnicianDashboard() {
       "div",
       { class: "mt-8" },
       card(
-        h("h3", { class: "text-sm font-semibold text-slate-900" }, "Tu zona de atención"),
+        h("h3", { class: "text-sm font-semibold text-foreground" }, "Tu zona de atención"),
         h(
           "p",
-          { class: "mt-1 text-sm text-slate-600" },
+          { class: "mt-1 text-sm text-foreground-secondary" },
           [profile.district_name, profile.province_name, profile.department_name]
             .filter(Boolean)
             .join(", ") || "Configura tu ubicación para recibir solicitudes de tu zona.",

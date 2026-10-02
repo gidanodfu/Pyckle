@@ -65,7 +65,7 @@ const RESULT_OPTIONS = [
 
 function reportButton(order) {
   if (!order.has_report) {
-    return h("span", { class: "text-xs text-slate-500" }, "-");
+    return h("span", { class: "text-xs text-muted" }, "-");
   }
   return button("Informe", {
     variant: "outline",
@@ -89,16 +89,16 @@ function orderCard(order, { admin }) {
       h(
         "div",
         {},
-        h("p", { class: "font-semibold text-slate-800" }, order.request.title),
+        h("p", { class: "font-semibold text-foreground" }, order.request.title),
         h(
           "p",
-          { class: "text-xs text-slate-500" },
+          { class: "text-xs text-muted" },
           `${order.request.specialty_name || "General"} · ${formatDateTime(order.created_at)}`,
         ),
         admin
           ? h(
               "p",
-              { class: "mt-1 text-xs text-slate-500" },
+              { class: "mt-1 text-xs text-muted" },
               `Cliente: ${order.customer.full_name} · Técnico: ${order.technician.full_name}`,
             )
           : null,
@@ -110,7 +110,7 @@ function orderCard(order, { admin }) {
         ),
         h(
           "p",
-          { class: "mt-2 text-sm font-semibold text-slate-900" },
+          { class: "mt-2 text-sm font-semibold text-foreground" },
           formatMoney(order.final_price),
         ),
       ),
@@ -174,7 +174,7 @@ export async function ordersView({
     return h(
       "div",
       { class: "mt-4 flex flex-wrap items-center justify-between gap-3" },
-      h("p", { class: "text-xs text-slate-500" }, `Mostrando ${from}-${to} de ${data.total}`),
+      h("p", { class: "text-xs text-muted" }, `Mostrando ${from}-${to} de ${data.total}`),
       h(
         "div",
         { class: "flex gap-2" },
@@ -238,24 +238,24 @@ export async function ordersView({
           ];
       const rowFor = (order) => {
         const base = [
-          h("span", { class: "font-mono text-xs text-slate-500" }, order.id.slice(0, 8)),
+          h("span", { class: "font-mono text-xs text-muted" }, order.id.slice(0, 8)),
           h(
             "span",
             {},
-            h("span", { class: "block font-medium text-slate-800" }, order.request.title),
+            h("span", { class: "block font-medium text-foreground" }, order.request.title),
             h(
               "span",
-              { class: "text-xs text-slate-500" },
+              { class: "text-xs text-muted" },
               order.request.specialty_name || "General",
             ),
           ),
         ];
         if (admin) {
           base.push(
-            h("span", { class: "text-sm text-slate-700" }, order.customer.full_name),
+            h("span", { class: "text-sm text-foreground-secondary" }, order.customer.full_name),
             h(
               "span",
-              { class: "inline-flex items-center gap-1.5 text-sm text-slate-700" },
+              { class: "inline-flex items-center gap-1.5 text-sm text-foreground-secondary" },
               order.technician.full_name,
               verifiedBadge(order.technician.is_verified),
             ),
@@ -263,7 +263,7 @@ export async function ordersView({
         }
         base.push(
           badge(order.status),
-          order.result ? badge(order.result) : h("span", { class: "text-xs text-slate-500" }, "-"),
+          order.result ? badge(order.result) : h("span", { class: "text-xs text-muted" }, "-"),
           formatMoney(order.final_price),
           formatDateTime(order.created_at),
           h(
@@ -308,13 +308,13 @@ export async function ordersView({
     card(
       h(
         "div",
-        { class: "grid gap-4 md:grid-cols-[1fr_1fr_1fr_1fr_1fr_auto]" },
+        { class: "grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3" },
         field("Categoría", specialtySelect),
         field("Estado", statusSelect),
         field("Resultado", resultSelect),
         field("Desde", fromDateInput),
         field("Hasta", toDateInput),
-        h("div", { class: "flex items-end gap-2" }, filterButton, clearButton),
+        h("div", { class: "flex flex-wrap items-end gap-2 sm:col-span-2 lg:col-span-3" }, filterButton, clearButton),
       ),
     ),
   );

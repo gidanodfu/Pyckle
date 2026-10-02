@@ -19,9 +19,9 @@
  */
 
 /**
- * Tema claro/oscuro. La preferencia se guarda en localStorage; si no hay una
- * guardada se respeta `prefers-color-scheme`. El modo oscuro usa el mismo
- * sistema de diseño (ver styles/style.css), no una inversión del claro.
+ * Tema claro/oscuro. La preferencia se guarda en localStorage. Dark es el tema
+ * por defecto de Pyckle; solo se aplica light si el usuario lo eligió. Ambos
+ * temas comparten los tokens semánticos (ver styles/style.css).
  */
 const STORAGE_KEY = "pyckle_theme";
 
@@ -46,8 +46,7 @@ export function initTheme() {
   } catch {
     stored = null;
   }
-  const prefersDark = window.matchMedia?.("(prefers-color-scheme: dark)")?.matches ?? false;
-  const dark = stored ? stored === "dark" : prefersDark;
+  const dark = stored ? stored === "dark" : true;
   document.documentElement.classList.toggle("dark", dark);
 }
 

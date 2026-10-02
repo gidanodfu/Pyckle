@@ -90,7 +90,7 @@ export async function ChatPage() {
     disabled: !isOpen,
   });
   const sendButton = button("Enviar", { type: "submit", iconName: "send", disabled: !isOpen });
-  const form = h("form", { class: "flex gap-2 border-t border-slate-200 p-3" }, input, sendButton);
+  const form = h("form", { class: "flex gap-2 border-t border-border p-3" }, input, sendButton);
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     const body = input.value.trim();
@@ -120,19 +120,19 @@ export async function ChatPage() {
       "button",
       {
         class: `w-full rounded-lg border px-3 py-2 text-left text-sm transition ${
-          active ? "border-blue-300 bg-blue-50" : "border-slate-200 hover:bg-slate-50"
+          active ? "border-primary bg-primary-tint" : "border-border hover:bg-surface-hover"
         }`,
         onClick: () => navigate(routes.chatWith(conversation.id)),
       },
       h(
         "div",
         { class: "flex items-center justify-between gap-2" },
-        h("p", { class: "truncate font-medium text-slate-800" }, other),
+        h("p", { class: "truncate font-medium text-foreground" }, other),
         conversation.status !== "open" ? badge("archived") : null,
       ),
       h(
         "p",
-        { class: "text-xs text-slate-500" },
+        { class: "text-xs text-muted" },
         conversation.last_message_at ? formatDateTime(conversation.last_message_at) : "Sin mensajes",
       ),
     );
@@ -142,11 +142,11 @@ export async function ChatPage() {
     "div",
     { class: "space-y-2 lg:max-h-[70vh] lg:overflow-y-auto" },
     activeConversations.length
-      ? h("p", { class: "px-1 text-xs font-semibold uppercase tracking-wide text-slate-500" }, "Activos")
+      ? h("p", { class: "px-1 text-xs font-semibold uppercase tracking-wide text-muted" }, "Activos")
       : null,
     activeConversations.map(conversationButton),
     archivedConversations.length
-      ? h("p", { class: "px-1 pt-3 text-xs font-semibold uppercase tracking-wide text-slate-500" }, "Archivados")
+      ? h("p", { class: "px-1 pt-3 text-xs font-semibold uppercase tracking-wide text-muted" }, "Archivados")
       : null,
     archivedConversations.map(conversationButton),
   );
@@ -155,15 +155,15 @@ export async function ChatPage() {
     selected.customer.id === me.user.id ? selected.technician.full_name : selected.customer.full_name;
   const pane = h(
     "div",
-    { class: "flex h-[70vh] flex-col rounded-xl border border-slate-200 bg-white" },
+    { class: "flex h-[70vh] flex-col rounded-xl border border-border bg-surface" },
     h(
       "div",
-      { class: "flex items-center justify-between gap-3 border-b border-slate-200 px-4 py-3" },
+      { class: "flex items-center justify-between gap-3 border-b border-border px-4 py-3" },
       h(
         "div",
         {},
-        h("p", { class: "font-semibold text-slate-900" }, other),
-        h("p", { class: "text-xs text-slate-500" }, isOpen ? "Mensajes en tiempo real" : "Conversación finalizada"),
+        h("p", { class: "font-semibold text-foreground" }, other),
+        h("p", { class: "text-xs text-muted" }, isOpen ? "Mensajes en tiempo real" : "Conversación finalizada"),
       ),
       selected.status !== "open" ? badge("archived") : null,
     ),
@@ -172,7 +172,7 @@ export async function ChatPage() {
       ? form
       : h(
           "div",
-          { class: "border-t border-slate-200 p-3" },
+          { class: "border-t border-border p-3" },
           alert("Esta conversación finalizó porque la reparación se completó. El historial permanece disponible.", "info"),
         ),
   );
@@ -204,14 +204,14 @@ function messageBubble(message, ownId) {
     h(
       "div",
       {
-        class: `max-w-[75%] rounded-2xl px-4 py-2 text-sm ${
-          own ? "bg-blue-700 text-white" : "bg-slate-100 text-slate-800"
+        class: `max-w-[75%] rounded-lg px-4 py-2 text-sm ${
+          own ? "bg-primary text-primary-foreground" : "bg-surface-hover text-foreground"
         }`,
       },
       h("p", { class: "whitespace-pre-line" }, message.body),
       h(
         "p",
-        { class: `mt-1 text-[10px] ${own ? "text-blue-100" : "text-slate-600"}` },
+        { class: `mt-1 text-[10px] ${own ? "text-primary-foreground/80" : "text-foreground-secondary"}` },
         formatDateTime(message.created_at),
       ),
     ),

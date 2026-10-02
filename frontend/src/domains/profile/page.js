@@ -40,7 +40,7 @@ export function CustomerProfilePage() {
   });
 
   const phoneInput = input({ name: "phone", type: "tel", value: me?.user?.phone || "" });
-  const phoneError = h("span", { class: "block text-xs font-medium text-red-600 hidden" }, PHONE_ERROR);
+  const phoneError = h("span", { class: "block text-xs font-medium text-danger hidden" }, PHONE_ERROR);
   phoneInput.addEventListener("input", () => {
     try {
       normalizePhone(phoneInput.value);
@@ -63,7 +63,7 @@ export function CustomerProfilePage() {
       input({ name: "address", value: profile.address || "", placeholder: "Av. Ejemplo 123" }),
       "Privada. Solo se comparte con el técnico cuando aceptas su cotización.",
     ),
-    h("p", { class: "text-sm font-semibold text-slate-700" }, "Ubicación"),
+    h("p", { class: "text-sm font-semibold text-foreground-secondary" }, "Ubicación"),
     location.node,
     submitButton,
   );
@@ -122,12 +122,12 @@ export function CustomerProfilePage() {
         "div",
         { class: "mt-6 grid gap-4 sm:grid-cols-2" },
         card(
-          h("p", { class: "text-xs uppercase tracking-wide text-slate-500" }, "Ubicación actual"),
-          h("p", { class: "mt-1 font-medium text-slate-800" }, currentLocation || "Sin registrar"),
+          h("p", { class: "text-xs uppercase tracking-wide text-muted" }, "Ubicación actual"),
+          h("p", { class: "mt-1 font-medium text-foreground" }, currentLocation || "Sin registrar"),
         ),
         card(
-          h("p", { class: "text-xs uppercase tracking-wide text-slate-500" }, "Miembro desde"),
-          h("p", { class: "mt-1 font-medium text-slate-800" }, me?.user?.created_at ? new Date(me.user.created_at).toLocaleDateString("es-PE", { day: "2-digit", month: "long", year: "numeric" }) : "-"),
+          h("p", { class: "text-xs uppercase tracking-wide text-muted" }, "Miembro desde"),
+          h("p", { class: "mt-1 font-medium text-foreground" }, me?.user?.created_at ? new Date(me.user.created_at).toLocaleDateString("es-PE", { day: "2-digit", month: "long", year: "numeric" }) : "-"),
         ),
       ),
       h("div", { class: "mt-6" }, card(form)),

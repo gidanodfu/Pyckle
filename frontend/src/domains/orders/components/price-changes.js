@@ -49,37 +49,37 @@ export function priceChangesCard(order, { isCustomer, canManage, onChanged }) {
         changes.map((change) =>
           h(
             "li",
-            { class: "rounded-lg border border-slate-200 p-3 text-sm" },
+            { class: "rounded-lg border border-border p-3 text-sm" },
             h(
               "div",
               { class: "flex flex-wrap items-center justify-between gap-2" },
               h(
                 "span",
-                { class: "font-medium text-slate-800" },
+                { class: "font-medium text-foreground" },
                 `${formatMoney(change.previous_price)} -> ${formatMoney(change.new_price)}`,
               ),
               badge(change.status),
             ),
-            h("p", { class: "mt-1 text-slate-600" }, change.reason),
+            h("p", { class: "mt-1 text-foreground-secondary" }, change.reason),
             change.decided_note
-              ? h("p", { class: "mt-1 text-xs text-slate-500" }, change.decided_note)
+              ? h("p", { class: "mt-1 text-xs text-muted" }, change.decided_note)
               : null,
-            h("p", { class: "mt-1 text-xs text-slate-500" }, formatDate(change.created_at)),
+            h("p", { class: "mt-1 text-xs text-muted" }, formatDate(change.created_at)),
           ),
         ),
       )
-    : h("p", { class: "text-sm text-slate-500" }, "Sin cambios de precio registrados.");
+    : h("p", { class: "text-sm text-muted" }, "Sin cambios de precio registrados.");
 
   const children = [
     h(
       "h3",
-      { class: "mb-3 flex items-center gap-2 text-lg font-semibold text-slate-900" },
+      { class: "mb-3 flex items-center gap-2 text-lg font-semibold text-foreground" },
       icon("receipt", { size: 18 }),
       "Cotización y cambios de precio",
     ),
     h(
       "p",
-      { class: "mb-3 text-xs text-slate-500" },
+      { class: "mb-3 text-xs text-muted" },
       "La cotización inicial no garantiza el precio final. Todo cambio queda registrado.",
     ),
     rows,
@@ -89,10 +89,10 @@ export function priceChangesCard(order, { isCustomer, canManage, onChanged }) {
     children.push(
       h(
         "div",
-        { class: "mt-4 flex flex-wrap gap-2 rounded-lg bg-amber-50 p-3" },
+        { class: "mt-4 flex flex-wrap gap-2 rounded-lg bg-warning-tint p-3" },
         h(
           "p",
-          { class: "w-full text-sm font-medium text-amber-800" },
+          { class: "w-full text-sm font-medium text-warning" },
           `Nuevo costo propuesto: ${formatMoney(pending.new_price)}`,
         ),
         button("Aceptar nuevo costo", {
@@ -153,7 +153,7 @@ export function priceChangesCard(order, { isCustomer, canManage, onChanged }) {
         submit.disabled = false;
       }
     });
-    children.push(h("p", { class: "mt-4 text-sm font-semibold text-slate-700" }, "Proponer cambio"), form);
+    children.push(h("p", { class: "mt-4 text-sm font-semibold text-foreground-secondary" }, "Proponer cambio"), form);
   }
 
   return card(...children);

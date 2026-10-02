@@ -43,9 +43,9 @@ export async function TechnicianReports() {
           { label: "", align: "right" },
         ],
         items.map((order) => [
-          h("span", { class: "font-mono text-xs text-slate-500" }, order.id.slice(0, 8)),
+          h("span", { class: "font-mono text-xs text-muted" }, order.id.slice(0, 8)),
           order.request.title,
-          order.result ? badge(order.result) : h("span", { class: "text-xs text-slate-500" }, "-"),
+          order.result ? badge(order.result) : h("span", { class: "text-xs text-muted" }, "-"),
           formatMoney(order.final_price),
           formatDateTime(order.completed_at || order.created_at),
           h(

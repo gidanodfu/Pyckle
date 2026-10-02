@@ -27,21 +27,35 @@ export function closeAllModals() {
   for (const close of [...openModals]) close();
 }
 
+const FOCUSABLE =
+  'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
 export function modal(title, content, onClose) {
+  const previouslyFocused = document.activeElement;
   const overlay = h("div", {
-    class: "fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4",
+    class: "fixed inset-0 z-50 flex items-center justify-center bg-overlay p-4",
     role: "dialog",
     "aria-modal": "true",
     "data-modal": "true",
   });
   const box = h(
     "div",
-    { class: "max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl bg-white p-6 shadow-xl" },
+    {
+      class:
+        "max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl border border-border bg-surface-elevated p-6 shadow-floating",
+      tabindex: "-1",
+    },
     h(
       "div",
       { class: "mb-4 flex items-center justify-between gap-3" },
-      h("h2", { class: "text-lg font-semibold text-slate-900" }, title),
-      button("", { variant: "ghost", class: "!px-2 !py-1 min-w-11", iconName: "x", onClick: () => close(), ariaLabel: "Cerrar" }),
+      h("h2", { class: "text-lg font-semibold text-foreground" }, title),
+      button("", {
+        variant: "ghost",
+        class: "!px-2 !py-1 min-w-11",
+        iconName: "x",
+        onClick: () => close(),
+        ariaLabel: "Cerrar",
+      }),
     ),
     content,
   );
@@ -50,10 +64,31 @@ export function modal(title, content, onClose) {
     openModals.delete(close);
     overlay.remove();
     document.removeEventListener("keydown", onKeydown);
+    if (previouslyFocused && previouslyFocused.focus) previouslyFocused.focus();
     if (onClose) onClose();
   }
   function onKeydown(event) {
-    if (event.key === "Escape") close();
+    if (event.key === "Escape") {
+      close();
+      return;
+    }
+    if (event.key !== "Tab") return;
+    // Focus trap: mantiene el foco dentro del diálogo.
+    const items = [...box.querySelectorAll(FOCUSABLE)].filter((el) => el.offsetParent !== null);
+    if (!items.length) {
+      event.preventDefault();
+      box.focus();
+      return;
+    }
+    const first = items[0];
+    const last = items[items.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
   }
   overlay.addEventListener("click", (event) => {
     if (event.target === overlay) close();
@@ -62,5 +97,7 @@ export function modal(title, content, onClose) {
   overlay.append(box);
   overlay.close = close;
   openModals.add(close);
+  // Mueve el foco al diálogo para lectores de pantalla y teclado.
+  queueMicrotask(() => box.focus());
   return overlay;
 }

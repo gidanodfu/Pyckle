@@ -23,6 +23,7 @@ export {
   button,
   card,
   field,
+  iconButton,
   input,
   link,
   pageHeader,
@@ -36,3 +37,4 @@ export { alert, emptyState, loadingList, spinner } from "./feedback.js";
 export { stars, statCard, table, verifiedBadge } from "./data.js";
 export { closeAllModals, modal } from "./overlay.js";
 export { withBusy } from "./busy.js";
+export { toast } from "./toast.js";

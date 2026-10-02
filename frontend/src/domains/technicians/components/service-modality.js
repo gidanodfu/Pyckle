@@ -28,8 +28,8 @@ export const SERVICE_MODALITIES = [
 ];
 
 const OPTION_BASE = "flex cursor-pointer items-start gap-3 rounded-lg border px-3 py-3 transition";
-const OPTION_SELECTED = ["border-blue-500", "bg-blue-50", "ring-1", "ring-blue-500"];
-const OPTION_IDLE = "border-slate-200";
+const OPTION_SELECTED = ["border-primary", "bg-primary-tint", "ring-1", "ring-primary"];
+const OPTION_IDLE = "border-border";
 
 /**
  * Radios exclusivos local / domicilio / ambas con dirección condicional.
@@ -59,8 +59,8 @@ export function serviceModalityFields({ value = "home", address = "" } = {}) {
       h(
         "span",
         {},
-        h("span", { class: "block text-sm font-medium text-slate-800" }, modality.label),
-        h("span", { class: "block text-xs text-slate-500" }, modality.hint),
+        h("span", { class: "block text-sm font-medium text-foreground" }, modality.label),
+        h("span", { class: "block text-xs text-muted" }, modality.hint),
       ),
     );
     return { label };
@@ -68,8 +68,8 @@ export function serviceModalityFields({ value = "home", address = "" } = {}) {
 
   const fieldset = h(
     "fieldset",
-    { class: "space-y-2 rounded-lg border border-slate-200 bg-slate-50 p-4" },
-    h("legend", { class: "px-1 text-sm font-semibold text-slate-700" }, "Modalidad de atención"),
+    { class: "space-y-2 rounded-lg border border-border bg-background p-4" },
+    h("legend", { class: "px-1 text-sm font-semibold text-foreground-secondary" }, "Modalidad de atención"),
     ...options.map((option) => option.label),
     addressBlock,
   );

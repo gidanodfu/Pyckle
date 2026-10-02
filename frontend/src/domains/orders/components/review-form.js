@@ -50,7 +50,7 @@ export function reviewForm(orderId) {
     }
   });
   return card(
-    h("h3", { class: "mb-3 text-lg font-semibold text-slate-900" }, "Califica el servicio"),
+    h("h3", { class: "mb-3 text-lg font-semibold text-foreground" }, "Califica el servicio"),
     h("div", { class: "mb-3" }, stars(5)),
     form,
   );

@@ -1,0 +1,16 @@
+{
+  "name": "pyckle-e2e",
+  "private": true,
+  "version": "0.1.0",
+  "description": "QA de navegador de Pyckle (Playwright + Chromium). Independiente del build de la app.",
+  "type": "module",
+  "scripts": {
+    "qa": "QA_THEME=dark node qa.mjs",
+    "qa:light": "QA_THEME=light node qa.mjs",
+    "interactions": "node interactions.mjs"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.63.0"
+  }
+}

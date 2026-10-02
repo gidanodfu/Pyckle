@@ -41,15 +41,15 @@ function requestRow(request) {
     "div",
     {
       class:
-        "flex flex-col gap-2 rounded-lg border border-slate-200 p-4 sm:flex-row sm:items-center sm:justify-between",
+        "flex flex-col gap-2 rounded-lg border border-border p-4 sm:flex-row sm:items-center sm:justify-between",
     },
     h(
       "div",
       {},
-      h("p", { class: "font-semibold text-slate-800" }, request.title),
+      h("p", { class: "font-semibold text-foreground" }, request.title),
       h(
         "p",
-        { class: "text-xs text-slate-500" },
+        { class: "text-xs text-muted" },
         `${request.specialty?.name || "General"} · ${formatDate(request.created_at)}${location ? ` · ${location}` : ""}`,
       ),
     ),
@@ -89,7 +89,7 @@ export async function CustomerDashboard() {
     location
       ? h(
           "p",
-          { class: "mt-4 inline-flex items-center gap-1.5 text-sm text-slate-500" },
+          { class: "mt-4 inline-flex items-center gap-1.5 text-sm text-muted" },
           icon("map-pin", { size: 15 }),
           location,
         )
@@ -100,7 +100,7 @@ export async function CustomerDashboard() {
       statCard("Solicitudes activas", active, { iconName: "clipboard-list" }),
       statCard("Reparaciones totales", orders.total, { iconName: "receipt-text" }),
       statCard("Reparaciones completadas", completed, {
-        accent: "text-emerald-700",
+        accent: "text-success",
         iconName: "circle-check",
       }),
     ),

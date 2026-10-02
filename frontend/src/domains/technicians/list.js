@@ -214,7 +214,7 @@ export async function TechniciansList() {
           {},
           h(
             "p",
-            { class: "mb-2 flex items-center gap-1.5 text-sm font-medium text-slate-700" },
+            { class: "mb-2 flex items-center gap-1.5 text-sm font-medium text-foreground-secondary" },
             icon("map-pin", { size: 15 }),
             "Ubicación",
           ),
@@ -222,7 +222,7 @@ export async function TechniciansList() {
         ),
         h(
           "label",
-          { class: "flex items-center gap-2 self-start text-sm text-slate-700 sm:pb-2 sm:self-end" },
+          { class: "flex items-center gap-2 self-start text-sm text-foreground-secondary sm:pb-2 sm:self-end" },
           verifiedCheckbox,
           "Solo verificados",
         ),

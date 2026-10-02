@@ -28,7 +28,7 @@ import { NEXT_TRANSITIONS } from "./technical-status.js";
 export function managementPanel(order, reload) {
   const transitions = NEXT_TRANSITIONS[order.status] || [];
   return card(
-    h("h3", { class: "mb-3 text-lg font-semibold text-slate-900" }, "Actualizar proceso"),
+    h("h3", { class: "mb-3 text-lg font-semibold text-foreground" }, "Actualizar proceso"),
     order.has_pending_price_change
       ? alert(
           "Hay un cambio de precio pendiente de aprobación del cliente; no puedes continuar el trabajo facturable.",

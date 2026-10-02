@@ -27,7 +27,7 @@ export function themeToggle() {
   const node = h("button", {
     type: "button",
     class:
-      "inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg p-2 text-slate-600 transition hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2",
+      "inline-flex min-h-11 min-w-11 items-center justify-center rounded-md p-2 text-foreground-secondary transition hover:bg-surface-hover hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
   });
 
   function render() {

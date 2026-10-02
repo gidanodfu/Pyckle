@@ -31,7 +31,7 @@ function menuLink(label, path, iconName) {
     "button",
     {
       class:
-        "flex min-h-11 w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-slate-600 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2",
+        "flex min-h-11 w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm text-foreground-secondary hover:bg-surface-hover hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
       onClick: () => navigate(path),
     },
     icon(iconName, { size: 16 }),
@@ -45,18 +45,19 @@ export function userMenu(me) {
     "div",
     {
       "data-user-menu": "true",
-      class: "absolute right-0 mt-2 hidden w-52 rounded-xl border border-slate-200 bg-white p-1.5 shadow-lg",
+      class:
+        "absolute right-0 mt-2 hidden w-52 rounded-lg border border-border bg-surface-elevated p-1.5 shadow-floating",
     },
     roles.includes("customer") ? menuLink("Mi perfil", routes.profileCustomer, "user") : null,
     roles.includes("technician")
       ? menuLink("Perfil profesional", routes.profileTechnician, "wrench")
       : null,
-    h("div", { class: "my-1 border-t border-slate-100" }),
+    h("div", { class: "my-1 border-t border-border-subtle" }),
     h(
       "button",
       {
         class:
-          "flex min-h-11 w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-red-700 hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2",
+          "flex min-h-11 w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm text-danger hover:bg-danger-tint focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         onClick: (event) =>
           withBusy(event.currentTarget, async () => {
             await auth.logout();
@@ -71,7 +72,7 @@ export function userMenu(me) {
     "button",
     {
       class:
-        "inline-flex min-h-11 items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2",
+        "inline-flex min-h-11 items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium text-foreground-secondary hover:bg-surface-hover hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
       "aria-label": "Menú de usuario",
     },
     icon("user", { size: 17 }),

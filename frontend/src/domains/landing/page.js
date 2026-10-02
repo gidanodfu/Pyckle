@@ -54,10 +54,10 @@ function specialtyTile(specialty) {
   return h(
     "div",
     {
-      class: "flex w-[calc(50%-0.375rem)] shrink-0 flex-col items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-5 text-center shadow-sm sm:w-[calc(33.333%-0.5rem)] lg:w-[calc(25%-0.75rem)]",
+      class: "flex w-[calc(50%-0.375rem)] shrink-0 flex-col items-center justify-center gap-2 rounded-lg border border-border bg-surface px-3 py-5 text-center sm:w-[calc(33.333%-0.5rem)] lg:w-[calc(25%-0.75rem)]",
     },
-    h("span", { class: "text-blue-800", "aria-hidden": "true" }, icon(iconName, { size: 22 })),
-    h("span", { class: "text-sm font-medium leading-snug text-slate-700" }, specialty.name),
+    h("span", { class: "text-primary", "aria-hidden": "true" }, icon(iconName, { size: 22 })),
+    h("span", { class: "text-sm font-medium leading-snug text-foreground-secondary" }, specialty.name),
   );
 }
 
@@ -80,24 +80,31 @@ export async function Landing() {
 
   const hero = h(
     "section",
-    { class: "border-b border-slate-200 bg-gradient-to-br from-blue-900 via-blue-800 to-emerald-700 text-white" },
+    { class: "border-b border-border bg-surface" },
     h(
       "div",
       { class: "mx-auto grid max-w-6xl gap-10 px-4 py-16 md:grid-cols-2 md:py-24" },
       h(
         "div",
         { class: "space-y-6" },
-        h("span", { class: "inline-flex rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide" }, "Marketplace de reparación"),
+        h(
+          "span",
+          {
+            class:
+              "inline-flex rounded-full border border-border bg-primary-tint px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary",
+          },
+          "Marketplace de reparación",
+        ),
         h(
           "h1",
-          { class: "text-4xl font-extrabold leading-tight md:text-5xl" },
+          { class: "text-4xl font-extrabold leading-tight text-foreground md:text-5xl" },
           "Tu equipo falla.",
           h("br"),
           "Encuentra quién lo repare.",
         ),
         h(
           "p",
-          { class: "max-w-lg text-lg text-blue-50" },
+          { class: "max-w-lg text-lg text-foreground-secondary" },
           "Publica la falla de tu dispositivo, recibe cotizaciones de técnicos verificados y elige cómo y dónde repararlo.",
         ),
         h(
@@ -116,17 +123,17 @@ export async function Landing() {
         { class: "grid gap-4 self-center" },
         h(
           "div",
-          { class: "rounded-2xl bg-white/10 p-5 backdrop-blur" },
-          h("p", { class: "text-3xl font-bold" }, String(specialties.length)),
-          h("p", { class: "text-sm text-blue-50" }, "Especialidades disponibles"),
+          { class: "rounded-lg border border-border bg-surface-elevated p-5" },
+          h("p", { class: "text-3xl font-bold tabular-nums text-foreground" }, String(specialties.length)),
+          h("p", { class: "text-sm text-muted" }, "Especialidades disponibles"),
         ),
         h(
           "div",
-          { class: "rounded-2xl bg-white/10 p-5 backdrop-blur" },
-          h("p", { class: "text-sm font-semibold text-white" }, "Todo queda registrado"),
+          { class: "rounded-lg border border-border bg-surface-elevated p-5" },
+          h("p", { class: "text-sm font-semibold text-foreground" }, "Todo queda registrado"),
           h(
             "p",
-            { class: "mt-1 text-sm text-blue-50" },
+            { class: "mt-1 text-sm text-foreground-secondary" },
             "Desde la solicitud hasta la entrega, consulta el estado y los cambios de tu reparación.",
           ),
         ),
@@ -136,7 +143,7 @@ export async function Landing() {
 
   const steps = Section(
     {},
-    h("h2", { class: "text-center text-3xl font-bold tracking-tight text-slate-900" }, "¿Cómo funciona?"),
+    h("h2", { class: "text-center text-3xl font-bold tracking-tight text-foreground" }, "¿Cómo funciona?"),
     h(
       "div",
       { class: "mt-8 grid gap-5 sm:grid-cols-2 md:gap-6 lg:grid-cols-3" },
@@ -144,22 +151,22 @@ export async function Landing() {
         card(
           h(
             "span",
-            { class: "flex h-11 w-11 items-center justify-center rounded-lg bg-blue-50 text-blue-800" },
+            { class: "flex h-11 w-11 items-center justify-center rounded-md bg-primary-tint text-primary" },
             icon(iconName, { size: 20 }),
           ),
-          h("h3", { class: "mt-3 text-lg font-semibold text-blue-900" }, `${index + 1}. ${title}`),
-          h("p", { class: "mt-2 text-sm leading-relaxed text-slate-600 md:text-base" }, text),
+          h("h3", { class: "mt-3 text-lg font-semibold text-foreground" }, `${index + 1}. ${title}`),
+          h("p", { class: "mt-2 text-sm leading-relaxed text-foreground-secondary md:text-base" }, text),
         ),
       ),
     ),
   );
 
   const specialtiesSection = Section(
-    { class: "bg-white" },
-    h("h2", { class: "text-center text-3xl font-bold tracking-tight text-slate-900" }, "Especialidades disponibles"),
+    { class: "bg-surface" },
+    h("h2", { class: "text-center text-3xl font-bold tracking-tight text-foreground" }, "Especialidades disponibles"),
     h(
       "p",
-      { class: "mx-auto mt-3 max-w-2xl text-center text-sm text-slate-600 md:text-base" },
+      { class: "mx-auto mt-3 max-w-2xl text-center text-sm text-foreground-secondary md:text-base" },
       "Selecciona el tipo de equipo y encuentra técnicos que trabajan con él.",
     ),
     h(
@@ -175,16 +182,16 @@ export async function Landing() {
     h(
       "div",
       { class: "mx-auto max-w-2xl text-center" },
-      h("h2", { class: "text-3xl font-bold tracking-tight text-slate-900" }, "¿Reparas dispositivos?"),
+      h("h2", { class: "text-3xl font-bold tracking-tight text-foreground" }, "¿Reparas dispositivos?"),
       h(
         "p",
-        { class: "mt-3 text-base text-slate-600 md:text-lg" },
+        { class: "mt-3 text-base text-foreground-secondary md:text-lg" },
         "Crea tu perfil, indica qué equipos reparas y cómo atiendes, y recibe solicitudes que coincidan con tus especialidades.",
       ),
       h(
         "div",
         { class: "mt-6 flex justify-center" },
-        button("Quiero ser técnico", { variant: "success", iconName: "wrench", onClick: () => navigate(routes.registerTechnician) }),
+        button("Quiero ser técnico", { iconName: "wrench", onClick: () => navigate(routes.registerTechnician) }),
       ),
     ),
   );

@@ -24,8 +24,8 @@ import { icon } from "../icons.js";
 export function spinner(label = "Cargando...") {
   return h(
     "div",
-    { class: "flex items-center justify-center gap-3 py-12 text-slate-500" },
-    icon("loader-2", { size: 20, class: "animate-spin text-blue-700" }),
+    { class: "flex items-center justify-center gap-3 py-12 text-muted" },
+    icon("loader-2", { size: 20, class: "animate-spin text-primary" }),
     h("span", { class: "text-sm" }, label),
   );
 }
@@ -33,26 +33,42 @@ export function spinner(label = "Cargando...") {
 export function emptyState(title, description, action, { iconName = "inbox" } = {}) {
   return h(
     "div",
-    { class: "flex flex-col items-center gap-2 rounded-xl border border-dashed border-slate-300 bg-white px-6 py-12 text-center" },
-    h("span", { class: "flex h-11 w-11 items-center justify-center rounded-full bg-slate-100 text-slate-500" }, icon(iconName, { size: 22 })),
-    h("p", { class: "text-base font-semibold text-slate-700" }, title),
-    description ? h("p", { class: "max-w-md text-sm text-slate-500" }, description) : null,
+    {
+      class:
+        "flex flex-col items-center gap-2 rounded-lg border border-dashed border-border bg-surface px-6 py-12 text-center",
+    },
+    h(
+      "span",
+      { class: "flex h-11 w-11 items-center justify-center rounded-full bg-surface-hover text-muted" },
+      icon(iconName, { size: 22 }),
+    ),
+    h("p", { class: "text-base font-semibold text-foreground" }, title),
+    description ? h("p", { class: "max-w-md text-sm text-muted" }, description) : null,
     action || null,
   );
 }
 
+const ALERTS = {
+  error: "border-border bg-danger-tint text-danger",
+  success: "border-border bg-success-tint text-success",
+  info: "border-border bg-primary-tint text-primary",
+  warning: "border-border bg-warning-tint text-warning",
+};
+const ALERT_ICONS = {
+  error: "alert-circle",
+  success: "check-circle-2",
+  info: "info",
+  warning: "alert-triangle",
+};
+
 export function alert(message, type = "error") {
-  const palette = {
-    error: "border-red-200 bg-red-50 text-red-800",
-    success: "border-emerald-200 bg-emerald-50 text-emerald-800",
-    info: "border-blue-200 bg-blue-50 text-blue-800",
-    warning: "border-amber-200 bg-amber-50 text-amber-800",
-  };
-  const icons = { error: "alert-circle", success: "check-circle-2", info: "info", warning: "alert-triangle" };
   return h(
     "div",
-    { class: `flex items-start gap-2 rounded-lg border px-4 py-3 text-sm ${palette[type]}`, role: "alert" },
-    icon(icons[type], { size: 18, class: "mt-0.5" }),
+    {
+      class: `flex items-start gap-2 rounded-md border px-4 py-3 text-sm ${ALERTS[type] || ALERTS.error}`,
+      role: "alert",
+    },
+    icon(ALERT_ICONS[type] || ALERT_ICONS.error, { size: 18, class: "mt-0.5" }),
     h("span", {}, message),
   );
 }

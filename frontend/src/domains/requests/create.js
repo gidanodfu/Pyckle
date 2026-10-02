@@ -82,7 +82,7 @@ export async function RequestCreate() {
     accept: "image/png,image/jpeg,image/webp",
     multiple: true,
   });
-  const imagesFeedback = h("p", { class: "hidden text-xs font-medium text-red-600" });
+  const imagesFeedback = h("p", { class: "hidden text-xs font-medium text-danger" });
   // Feedback inmediato: los archivos que exceden el límite no entran al flujo
   // de subida ni se envían al almacenamiento.
   imagesInput.addEventListener("change", () => {
@@ -122,7 +122,7 @@ export async function RequestCreate() {
       field("Presupuesto mínimo (S/)", input({ name: "budget_min", type: "number", min: 0, step: "0.01" })),
       field("Presupuesto máximo (S/)", input({ name: "budget_max", type: "number", min: 0, step: "0.01" })),
     ),
-    h("p", { class: "text-sm font-semibold text-slate-700" }, "Ubicación"),
+    h("p", { class: "text-sm font-semibold text-foreground-secondary" }, "Ubicación"),
     location.node,
     addressField,
     field(

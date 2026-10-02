@@ -32,7 +32,7 @@ export function verifiedBadge(verified, { label = "Técnico verificado", size = 
   return h(
     "span",
     {
-      class: "inline-flex items-center text-blue-700",
+      class: "inline-flex items-center text-primary",
       role: "img",
       "aria-label": label,
       title: label,
@@ -44,25 +44,31 @@ export function verifiedBadge(verified, { label = "Técnico verificado", size = 
 export function stars(rating, { size = 14, showValue = false } = {}) {
   const value = Number(rating || 0);
   const filled = Math.round(value);
-  const wrapper = h("span", { class: "inline-flex items-center gap-1", role: "img", "aria-label": `${value} de 5` });
+  const wrapper = h("span", {
+    class: "inline-flex items-center gap-1",
+    role: "img",
+    "aria-label": `${value} de 5`,
+  });
   const row = h("span", { class: "inline-flex items-center" });
   for (let index = 1; index <= 5; index += 1) {
     row.append(
       icon("star", {
         size,
-        class: index <= filled ? "fill-amber-400 text-amber-500" : "text-slate-300",
+        class: index <= filled ? "fill-warning text-warning" : "text-surface-strong",
       }),
     );
   }
   wrapper.append(row);
-  if (showValue) wrapper.append(h("span", { class: "text-sm font-semibold text-amber-700" }, value.toFixed(1)));
+  if (showValue) {
+    wrapper.append(h("span", { class: "text-sm font-semibold text-warning" }, value.toFixed(1)));
+  }
   return wrapper;
 }
 
 const ALIGN_CLASS = { left: "text-left", center: "text-center", right: "text-right" };
 
 function cellClass(align) {
-  return `px-4 py-3 text-sm text-slate-700 ${ALIGN_CLASS[align] || "text-left"}`;
+  return `px-4 py-3 text-sm text-foreground-secondary ${ALIGN_CLASS[align] || "text-left"}`;
 }
 
 export function table(columns, rows) {
@@ -71,7 +77,7 @@ export function table(columns, rows) {
   );
   const head = h(
     "thead",
-    { class: "bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500" },
+    { class: "bg-surface-hover text-xs font-semibold uppercase tracking-wide text-muted" },
     h(
       "tr",
       {},
@@ -86,23 +92,39 @@ export function table(columns, rows) {
   );
   const body = h(
     "tbody",
-    { class: "divide-y divide-slate-100" },
+    { class: "divide-y divide-border-subtle" },
     rows.map((row) =>
       h(
         "tr",
-        { class: "hover:bg-slate-50" },
-        row.map((cell, index) => h("td", { class: cellClass(normalized[index]?.align) }, cell)),
+        { class: "hover:bg-surface-hover" },
+        row.map((cell, index) =>
+          h(
+            "td",
+            {
+              class: cellClass(normalized[index]?.align),
+              "data-label": normalized[index]?.label || "",
+            },
+            cell,
+          ),
+        ),
       ),
     ),
   );
+  // En móvil la tabla se reflowa a fichas usando `data-label` (sin scroll
+  // horizontal). El contenedor es una región enfocable por teclado.
   return h(
     "div",
-    { class: "overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm" },
-    h("table", { class: "min-w-full divide-y divide-slate-200" }, head, body),
+    {
+      class: "responsive-table overflow-x-auto rounded-lg border border-border bg-surface",
+      tabindex: "0",
+      role: "region",
+      "aria-label": "Tabla de datos",
+    },
+    h("table", { class: "min-w-full divide-y divide-border" }, head, body),
   );
 }
 
-export function statCard(label, value, { accent = "text-blue-800", iconName } = {}) {
+export function statCard(label, value, { accent = "text-foreground", iconName } = {}) {
   return card(
     h(
       "div",
@@ -110,11 +132,15 @@ export function statCard(label, value, { accent = "text-blue-800", iconName } = 
       h(
         "div",
         {},
-        h("p", { class: "text-sm text-slate-500" }, label),
-        h("p", { class: `mt-1 text-2xl font-bold ${accent}` }, value),
+        h("p", { class: "text-sm text-muted" }, label),
+        h("p", { class: `mt-1 text-2xl font-bold tabular-nums ${accent}` }, value),
       ),
       iconName
-        ? h("span", { class: "flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 text-slate-500" }, icon(iconName, { size: 18 }))
+        ? h(
+            "span",
+            { class: "flex h-9 w-9 items-center justify-center rounded-md bg-surface-hover text-muted" },
+            icon(iconName, { size: 18 }),
+          )
         : null,
     ),
   );

@@ -30,7 +30,7 @@ import { themeToggle } from "./theme-toggle.js";
 import { userMenu } from "./user-menu.js";
 
 const FOCUS_RING =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2";
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
 function navLink(label, path, current, iconName) {
   const active = current === path || (path !== "/" && current.startsWith(path));
@@ -39,8 +39,10 @@ function navLink(label, path, current, iconName) {
     {
       href: path,
       "data-link": "true",
-      class: `inline-flex min-h-11 items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition ${FOCUS_RING} ${
-        active ? "bg-blue-50 text-blue-800" : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+      class: `inline-flex min-h-11 items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium transition ${FOCUS_RING} ${
+        active
+          ? "bg-primary-tint text-primary"
+          : "text-foreground-secondary hover:bg-surface-hover hover:text-foreground"
       }`,
     },
     iconName ? icon(iconName, { size: 16 }) : null,
@@ -111,7 +113,7 @@ export function createNavbarController() {
   menuButton.setAttribute("aria-controls", "main-nav");
   const node = h(
     "header",
-    { class: "sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur" },
+    { class: "sticky top-0 z-40 border-b border-border bg-surface/95 backdrop-blur" },
     h(
       "div",
       { class: "mx-auto flex max-w-6xl flex-wrap items-center gap-2 px-4 py-3" },
@@ -126,14 +128,26 @@ export function createNavbarController() {
   let currentPath = window.location.pathname;
   let bell = null;
 
-  function closeMenu() {
-    linksBox.classList.add("hidden");
-    menuButton.setAttribute("aria-expanded", "false");
+  function setMenu(open) {
+    linksBox.classList.toggle("hidden", !open);
+    menuButton.setAttribute("aria-expanded", open ? "true" : "false");
+    menuButton.setAttribute("aria-label", open ? "Cerrar menú" : "Abrir menú");
   }
 
-  menuButton.addEventListener("click", () => {
-    const open = linksBox.classList.toggle("hidden") === false;
-    menuButton.setAttribute("aria-expanded", open ? "true" : "false");
+  function closeMenu() {
+    setMenu(false);
+  }
+
+  menuButton.addEventListener("click", () => setMenu(linksBox.classList.contains("hidden")));
+
+  // Cierra el menú móvil al hacer clic fuera o con Escape (paridad con popovers).
+  document.addEventListener("click", (event) => {
+    if (linksBox.classList.contains("hidden")) return;
+    if (node.contains(event.target)) return;
+    closeMenu();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeMenu();
   });
 
   function renderRight(me) {

@@ -74,7 +74,7 @@ export async function UsersPage() {
           h(
             "div",
             { class: "flex flex-wrap gap-1" },
-            user.roles.map((role) => h("span", { class: "rounded-full bg-slate-100 px-2 py-0.5 text-xs" }, role.name)),
+            user.roles.map((role) => h("span", { class: "rounded-full bg-surface-hover px-2 py-0.5 text-xs" }, role.name)),
           ),
           user.is_active ? badge("completed", "Activo") : badge("cancelled", "Inactivo"),
           formatDate(user.created_at),
@@ -83,7 +83,7 @@ export async function UsersPage() {
             { class: "flex justify-center gap-2" },
             button("Editar", { variant: "outline", iconName: "pencil", onClick: () => openEdit(user) }),
             user.id !== me.user.id
-              ? button("Eliminar", { variant: "danger", iconName: "trash-2", onClick: () => removeUser(user) })
+              ? button("Eliminar", { variant: "danger-ghost", iconName: "trash-2", onClick: () => removeUser(user) })
               : null,
           ),
         ]),
@@ -133,7 +133,7 @@ export async function UsersPage() {
       "form",
       { class: "space-y-4" },
       errorBox,
-      h("div", { class: "text-sm text-slate-500" }, user.email),
+      h("div", { class: "text-sm text-muted" }, user.email),
       field("Roles", roleBoxes),
       h(
         "div",

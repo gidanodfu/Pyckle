@@ -37,7 +37,7 @@ const DETAIL_ROWS = [
 export function detailsCard(order, { canManage, onChanged } = {}) {
   if (!canManage) {
     return card(
-      h("h3", { class: "mb-3 text-lg font-semibold text-slate-900" }, "Detalles técnicos"),
+      h("h3", { class: "mb-3 text-lg font-semibold text-foreground" }, "Detalles técnicos"),
       h(
         "dl",
         { class: "space-y-3 text-sm" },
@@ -45,10 +45,10 @@ export function detailsCard(order, { canManage, onChanged } = {}) {
           h(
             "div",
             {},
-            h("dt", { class: "text-xs uppercase tracking-wide text-slate-500" }, label),
+            h("dt", { class: "text-xs uppercase tracking-wide text-muted" }, label),
             h(
               "dd",
-              { class: "mt-0.5 whitespace-pre-line text-slate-700" },
+              { class: "mt-0.5 whitespace-pre-line text-foreground-secondary" },
               order[field] || "-",
             ),
           ),
@@ -97,7 +97,7 @@ export function detailsCard(order, { canManage, onChanged } = {}) {
     }
   });
   return card(
-    h("h3", { class: "mb-3 text-lg font-semibold text-slate-900" }, "Detalles técnicos"),
+    h("h3", { class: "mb-3 text-lg font-semibold text-foreground" }, "Detalles técnicos"),
     form,
   );
 }

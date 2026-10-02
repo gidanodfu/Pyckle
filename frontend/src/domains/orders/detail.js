@@ -129,7 +129,7 @@ export async function OrderDetail({ id }) {
     h(
       "div",
       { class: "flex flex-wrap items-center justify-between gap-2" },
-      h("h3", { class: "text-lg font-semibold text-slate-900" }, "Resumen"),
+      h("h3", { class: "text-lg font-semibold text-foreground" }, "Resumen"),
       h(
         "div",
         { class: "flex flex-wrap items-center gap-2" },
@@ -163,7 +163,7 @@ export async function OrderDetail({ id }) {
       ? h(
           "p",
           {
-            class: "mt-4 inline-flex items-center gap-2 rounded-lg bg-blue-50 px-3 py-2 text-sm text-blue-900",
+            class: "mt-4 inline-flex items-center gap-2 rounded-lg bg-primary-tint px-3 py-2 text-sm text-primary",
           },
           icon("map-pin", { size: 15 }),
           order.service_address,
@@ -172,7 +172,7 @@ export async function OrderDetail({ id }) {
   );
 
   const timelineCard = card(
-    h("h3", { class: "mb-4 text-lg font-semibold text-slate-900" }, "Seguimiento"),
+    h("h3", { class: "mb-4 text-lg font-semibold text-foreground" }, "Seguimiento"),
     orderTimeline(order.events),
   );
 
@@ -180,13 +180,13 @@ export async function OrderDetail({ id }) {
     ? card(
         h(
           "h3",
-          { class: "mb-2 flex items-center gap-2 text-lg font-semibold text-slate-900" },
+          { class: "mb-2 flex items-center gap-2 text-lg font-semibold text-foreground" },
           icon("file-text", { size: 18 }),
           "Informe de reparación",
         ),
         h(
           "p",
-          { class: "text-sm text-slate-600" },
+          { class: "text-sm text-foreground-secondary" },
           `Versión ${order.report.version} · ${formatDateTime(order.report.generated_at)}`,
         ),
         h(
@@ -203,7 +203,7 @@ export async function OrderDetail({ id }) {
     isCustomer && order.status === "completed" && !order.has_review ? reviewForm(id) : null;
   const reviewShown =
     isCustomer && order.has_review
-      ? card(h("p", { class: "text-sm text-emerald-700" }, "Gracias por calificar este servicio."))
+      ? card(h("p", { class: "text-sm text-success" }, "Gracias por calificar este servicio."))
       : null;
 
   const columns = [summary, timelineCard];
@@ -242,8 +242,8 @@ function detailRow(label, value) {
   return h(
     "li",
     {},
-    h("p", { class: "text-xs uppercase tracking-wide text-slate-500" }, label),
-    h("p", { class: "whitespace-pre-line text-sm text-slate-700" }, value),
+    h("p", { class: "text-xs uppercase tracking-wide text-muted" }, label),
+    h("p", { class: "whitespace-pre-line text-sm text-foreground-secondary" }, value),
   );
 }
 
@@ -251,7 +251,7 @@ function item(label, value) {
   return h(
     "div",
     {},
-    h("dt", { class: "text-xs uppercase tracking-wide text-slate-500" }, label),
-    h("dd", { class: "font-medium text-slate-700" }, value),
+    h("dt", { class: "text-xs uppercase tracking-wide text-muted" }, label),
+    h("dd", { class: "font-medium text-foreground-secondary" }, value),
   );
 }

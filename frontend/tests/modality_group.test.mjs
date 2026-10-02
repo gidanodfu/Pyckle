@@ -25,14 +25,14 @@ test("modalidad: opciones verticales, mismo grupo, exclusivas y valores intactos
   assert.equal(radios.filter((radio) => radio.checked).length, 1);
   assert.equal(modality.getValue(), "home");
 
-  const SELECTED = ["border-blue-500", "bg-blue-50", "ring-1", "ring-blue-500"];
+  const SELECTED = ["border-primary", "bg-primary-tint", "ring-1", "ring-primary"];
   const labelFor = (value) => radios.find((radio) => radio.value === value).closest("label");
   const hasSelected = (label) => SELECTED.every((token) => label.classList.contains(token));
 
   // El estado inicial aplica las clases de selección como tokens.
   assert.ok(hasSelected(labelFor("home")));
   assert.ok(!hasSelected(labelFor("workshop")));
-  assert.ok(labelFor("workshop").classList.contains("border-slate-200"));
+  assert.ok(labelFor("workshop").classList.contains("border-border"));
 
   const workshop = radios.find((radio) => radio.value === "workshop");
   workshop.checked = true;
@@ -44,7 +44,7 @@ test("modalidad: opciones verticales, mismo grupo, exclusivas y valores intactos
   // Al cambiar de opción no quedan clases residuales en la anterior.
   assert.ok(hasSelected(labelFor("workshop")));
   assert.ok(!hasSelected(labelFor("home")));
-  assert.ok(labelFor("home").classList.contains("border-slate-200"));
+  assert.ok(labelFor("home").classList.contains("border-border"));
 
   const payload = modality.getPayload();
   assert.equal(payload.offers_home_service, false);

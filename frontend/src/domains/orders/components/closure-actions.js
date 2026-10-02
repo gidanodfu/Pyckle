@@ -122,11 +122,11 @@ export function closeActionsCard(order, reload) {
   });
 
   return card(
-    h("h3", { class: "mb-3 text-lg font-semibold text-slate-900" }, "Cierre"),
+    h("h3", { class: "mb-3 text-lg font-semibold text-foreground" }, "Cierre"),
     completeForm,
-    h("hr", { class: "my-4 border-slate-200" }),
+    h("hr", { class: "my-4 border-border" }),
     notRepairableForm,
-    h("hr", { class: "my-4 border-slate-200" }),
+    h("hr", { class: "my-4 border-border" }),
     cancelForm,
   );
 }

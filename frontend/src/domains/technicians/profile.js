@@ -47,36 +47,36 @@ export async function TechnicianProfile({ id }) {
         "div",
         { class: "mt-6 grid gap-4 sm:grid-cols-3" },
         card(
-          h("p", { class: "text-sm text-slate-500" }, "Experiencia"),
-          h("p", { class: "text-xl font-bold text-blue-800" }, `${technician.experience_years} años`),
+          h("p", { class: "text-sm text-muted" }, "Experiencia"),
+          h("p", { class: "text-xl font-bold text-primary" }, `${technician.experience_years} años`),
         ),
         card(
-          h("p", { class: "text-sm text-slate-500" }, "Calificación"),
+          h("p", { class: "text-sm text-muted" }, "Calificación"),
           h("div", { class: "mt-1" }, stars(technician.rating_avg, { size: 18, showValue: true })),
-          h("p", { class: "text-xs text-slate-500" }, `${technician.rating_count} reseñas`),
+          h("p", { class: "text-xs text-muted" }, `${technician.rating_count} reseñas`),
         ),
         card(
-          h("p", { class: "text-sm text-slate-500" }, "Servicios"),
+          h("p", { class: "text-sm text-muted" }, "Servicios"),
           h(
             "p",
-            { class: "text-sm font-medium text-slate-700" },
+            { class: "text-sm font-medium text-foreground-secondary" },
             [technician.offers_home_service ? "Domicilio" : null, technician.offers_workshop_service ? "Taller" : null]
               .filter(Boolean)
               .join(" y ") || "-",
           ),
         ),
       ),
-      h("h2", { class: "mt-8 text-lg font-semibold text-slate-900" }, "Especialidades"),
+      h("h2", { class: "mt-8 text-lg font-semibold text-foreground" }, "Especialidades"),
       h(
         "div",
         { class: "mt-3 flex flex-wrap gap-2" },
         (technician.specialties || []).length
           ? technician.specialties.map((specialty) =>
-              h("span", { class: "rounded-full border border-slate-200 px-3 py-1 text-sm" }, specialty.name),
+              h("span", { class: "rounded-full border border-border px-3 py-1 text-sm" }, specialty.name),
             )
-          : h("p", { class: "text-sm text-slate-500" }, "Sin especialidades registradas."),
+          : h("p", { class: "text-sm text-muted" }, "Sin especialidades registradas."),
       ),
-      h("h2", { class: "mt-8 text-lg font-semibold text-slate-900" }, `Reseñas (${reviews.length})`),
+      h("h2", { class: "mt-8 text-lg font-semibold text-foreground" }, `Reseñas (${reviews.length})`),
       h(
         "div",
         { class: "mt-3 space-y-3" },
@@ -86,11 +86,11 @@ export async function TechnicianProfile({ id }) {
                 h(
                   "div",
                   { class: "flex items-center justify-between gap-2" },
-                  h("p", { class: "font-medium text-slate-800" }, review.customer_name),
+                  h("p", { class: "font-medium text-foreground" }, review.customer_name),
                   stars(review.rating),
                 ),
-                review.comment ? h("p", { class: "mt-2 text-sm text-slate-600" }, review.comment) : null,
-                h("p", { class: "mt-1 text-xs text-slate-500" }, formatDate(review.created_at)),
+                review.comment ? h("p", { class: "mt-2 text-sm text-foreground-secondary" }, review.comment) : null,
+                h("p", { class: "mt-1 text-xs text-muted" }, formatDate(review.created_at)),
               ),
             )
           : emptyState("Sin reseñas", "Este técnico aún no tiene calificaciones.", null, { iconName: "star" }),

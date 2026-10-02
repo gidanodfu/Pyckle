@@ -42,10 +42,10 @@ export async function TechnicianQuotations() {
               h(
                 "div",
                 {},
-                h("p", { class: "font-semibold text-slate-800" }, formatMoney(quotation.price)),
+                h("p", { class: "font-semibold text-foreground" }, formatMoney(quotation.price)),
                 h(
                   "p",
-                  { class: "text-xs text-slate-500" },
+                  { class: "text-xs text-muted" },
                   `${quotation.estimated_days} día(s) · ${formatDate(quotation.created_at)}`,
                 ),
               ),
@@ -60,7 +60,7 @@ export async function TechnicianQuotations() {
                 }),
               ),
             ),
-            h("p", { class: "mt-2 text-sm text-slate-600" }, quotation.preliminary_diagnosis),
+            h("p", { class: "mt-2 text-sm text-foreground-secondary" }, quotation.preliminary_diagnosis),
           ),
         ),
       )

@@ -88,7 +88,7 @@ function fill(node, options, selected = "") {
 }
 
 function makeSelect(name, required, disabled = false) {
-  return h("select", { name, required, disabled, class: "field-input disabled:bg-slate-100" });
+  return h("select", { name, required, disabled, class: "field-input" });
 }
 
 const PLACEHOLDER = {
@@ -174,7 +174,7 @@ export function locationFields({ value = {}, required = true, hint } = {}) {
     field("Departamento", departmentSelect),
     field("Provincia", provinceSelect),
     field("Distrito", districtSelect),
-    hint ? h("p", { class: "text-xs text-slate-600 sm:col-span-3" }, hint) : null,
+    hint ? h("p", { class: "text-xs text-muted sm:col-span-3" }, hint) : null,
   );
 
   return {

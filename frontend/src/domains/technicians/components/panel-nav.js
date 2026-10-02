@@ -64,16 +64,16 @@ const STATUS_ORDER = [
 
 export function statusCountsList(byStatus) {
   const entries = STATUS_ORDER.filter((status) => byStatus[status]);
-  if (!entries.length) return h("p", { class: "text-sm text-slate-500" }, "Sin reparaciones aún.");
+  if (!entries.length) return h("p", { class: "text-sm text-muted" }, "Sin reparaciones aún.");
   return h(
     "ul",
     { class: "grid gap-2 sm:grid-cols-2" },
     entries.map((status) =>
       h(
         "li",
-        { class: "flex items-center justify-between rounded-lg border border-slate-200 px-3 py-2 text-sm" },
-        h("span", { class: "text-slate-700" }, statusLabel(status)),
-        h("span", { class: "font-semibold text-slate-900" }, byStatus[status]),
+        { class: "flex items-center justify-between rounded-lg border border-border px-3 py-2 text-sm" },
+        h("span", { class: "text-foreground-secondary" }, statusLabel(status)),
+        h("span", { class: "font-semibold text-foreground" }, byStatus[status]),
       ),
     ),
   );

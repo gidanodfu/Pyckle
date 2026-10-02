@@ -71,10 +71,10 @@ export async function RequestDetail({ id }) {
     h(
       "div",
       { class: "flex flex-wrap items-center justify-between gap-2" },
-      h("h2", { class: "text-xl font-bold text-slate-900" }, request.title),
+      h("h2", { class: "text-xl font-bold text-foreground" }, request.title),
       badge(request.status),
     ),
-    h("p", { class: "mt-3 whitespace-pre-line text-sm text-slate-600" }, request.description),
+    h("p", { class: "mt-3 whitespace-pre-line text-sm text-foreground-secondary" }, request.description),
     h(
       "dl",
       { class: "mt-4 grid gap-3 text-sm sm:grid-cols-2" },
@@ -98,12 +98,12 @@ export async function RequestDetail({ id }) {
     request.address
       ? h(
           "p",
-          { class: "mt-4 inline-flex items-center gap-2 rounded-lg bg-slate-50 px-3 py-2 text-sm text-slate-600" },
+          { class: "mt-4 inline-flex items-center gap-2 rounded-lg bg-background px-3 py-2 text-sm text-foreground-secondary" },
           icon("map-pin", { size: 15 }),
           request.address,
         )
       : isTechnician && !isOwner
-        ? h("p", { class: "mt-4 text-xs text-slate-500" }, "La dirección exacta se muestra al aceptar la cotización.")
+        ? h("p", { class: "mt-4 text-xs text-muted" }, "La dirección exacta se muestra al aceptar la cotización.")
         : null,
     (request.images || []).length
       ? h(
@@ -113,7 +113,7 @@ export async function RequestDetail({ id }) {
             h(
               "a",
               { href: image.url, target: "_blank", rel: "noopener", class: "block" },
-              h("img", { src: image.url, alt: `Imagen de ${request.title}`, loading: "lazy", class: "h-24 w-full rounded-lg border border-slate-200 object-cover" }),
+              h("img", { src: image.url, alt: `Imagen de ${request.title}`, loading: "lazy", class: "h-24 w-full rounded-lg border border-border object-cover" }),
             ),
           ),
         )
@@ -145,7 +145,7 @@ export async function RequestDetail({ id }) {
   const quotationSection = h(
     "section",
     { class: "mt-8 space-y-3" },
-    h("h3", { class: "text-lg font-semibold text-slate-900" }, `Cotizaciones (${quotations.length})`),
+    h("h3", { class: "text-lg font-semibold text-foreground" }, `Cotizaciones (${quotations.length})`),
     quotations.length
       ? quotations.map((quotation) => quotationCard(quotation, { isOwner }))
       : emptyState(
@@ -176,7 +176,7 @@ function detailItem(label, value) {
   return h(
     "div",
     {},
-    h("dt", { class: "text-xs uppercase tracking-wide text-slate-500" }, label),
-    h("dd", { class: "font-medium text-slate-700" }, value),
+    h("dt", { class: "text-xs uppercase tracking-wide text-muted" }, label),
+    h("dd", { class: "font-medium text-foreground-secondary" }, value),
   );
 }

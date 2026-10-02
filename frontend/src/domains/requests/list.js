@@ -59,9 +59,9 @@ export async function RequestsList() {
     return Container(
       pageHeader("Solicitudes", "Solicitudes compatibles con tus especialidades y tu zona."),
       notice ? h("div", { class: "mt-6" }, notice) : null,
-      h("h2", { class: "mt-6 mb-3 text-lg font-semibold text-slate-900" }, "Disponibles"),
+      h("h2", { class: "mt-6 mb-3 text-lg font-semibold text-foreground" }, "Disponibles"),
       h("div", { class: "mb-8" }, requestsTable(available.items)),
-      h("h2", { class: "mb-3 text-lg font-semibold text-slate-900" }, "Mis solicitudes asignadas"),
+      h("h2", { class: "mb-3 text-lg font-semibold text-foreground" }, "Mis solicitudes asignadas"),
       requestsTable(mine.items),
     );
   }
@@ -107,7 +107,7 @@ function requestsTable(items, { admin = false } = {}) {
         .filter(Boolean)
         .join(", ");
       return [
-        h("span", { class: "font-medium text-slate-800" }, request.title),
+        h("span", { class: "font-medium text-foreground" }, request.title),
         location || "-",
         request.specialty?.name || "General",
         badge(request.status),

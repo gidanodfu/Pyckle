@@ -42,9 +42,9 @@ export function Login() {
     googleAuthButton("login", "Continuar con Google"),
     h(
       "p",
-      { class: "text-center text-sm text-slate-500" },
+      { class: "text-center text-sm text-muted" },
       "¿No tienes cuenta? ",
-      h("a", { href: routes.register, "data-link": "true", class: "font-medium text-blue-700 hover:underline" }, "Regístrate"),
+      h("a", { href: routes.register, "data-link": "true", class: "font-medium text-primary hover:underline" }, "Regístrate"),
     ),
   );
   // Error devuelto por el callback OAuth (solo un código no sensible).

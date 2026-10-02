@@ -49,7 +49,7 @@ export async function TechnicianOwnProfile() {
     specialties.map((specialty) =>
       h(
         "label",
-        { class: "flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm" },
+        { class: "flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm" },
         h("input", { type: "checkbox", name: "specialty_ids", value: specialty.id, checked: currentIds.has(specialty.id) }),
         specialty.name,
       ),
@@ -75,7 +75,7 @@ export async function TechnicianOwnProfile() {
     field("Descripción profesional", textarea({ name: "bio", rows: 4, value: profile.bio || "" })),
     field("Años de experiencia", input({ name: "experience_years", type: "number", min: 0, max: 80, value: profile.experience_years })),
     modality.node,
-    h("p", { class: "text-sm font-semibold text-slate-700" }, "Ubicación de servicio"),
+    h("p", { class: "text-sm font-semibold text-foreground-secondary" }, "Ubicación de servicio"),
     location.node,
     field("Especialidades", specialtyBoxes),
     submitButton,

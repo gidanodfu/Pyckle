@@ -21,21 +21,32 @@
 import { h, statusLabel } from "../dom.js";
 import { icon } from "../icons.js";
 
+const FOCUS =
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background";
+
 const VARIANTS = {
-  primary: "bg-blue-700 hover:bg-blue-800 text-white shadow-sm",
-  success: "bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm",
-  danger: "bg-red-600 hover:bg-red-700 text-white shadow-sm",
-  ghost: "bg-transparent hover:bg-slate-100 text-slate-700 border border-slate-300",
-  outline: "bg-white hover:bg-slate-50 text-blue-800 border border-blue-200",
-  neutral: "bg-white hover:bg-slate-50 text-slate-700 border border-slate-300",
+  primary: "bg-primary text-primary-foreground hover:bg-primary-hover",
+  success: "bg-success text-success-foreground hover:opacity-90",
+  danger: "bg-danger text-danger-foreground hover:opacity-90",
+  ghost: "border border-border text-foreground-secondary hover:bg-surface-hover",
+  outline: "border border-border bg-surface text-foreground hover:bg-surface-hover",
+  neutral: "border border-border bg-surface text-foreground hover:bg-surface-hover",
+  "danger-ghost": "border border-border text-danger hover:bg-danger-tint",
+};
+
+const SIZES = {
+  sm: "min-h-9 px-3 py-1.5 text-sm",
+  md: "min-h-11 px-4 py-2 text-sm",
 };
 
 export function button(
   label,
   {
     variant = "primary",
+    size = "md",
     onClick,
     disabled = false,
+    loading = false,
     type = "button",
     class: extra = "",
     iconName,
@@ -44,41 +55,94 @@ export function button(
     ariaLabel,
   } = {},
 ) {
-  const leading = iconNode || (iconName ? icon(iconName, { size: iconSize }) : null);
+  const leading = loading
+    ? icon("loader-2", { size: iconSize, class: "animate-spin" })
+    : iconNode || (iconName ? icon(iconName, { size: iconSize }) : null);
   const node = h(
     "button",
     {
       type,
-      class: `inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${VARIANTS[variant]} ${extra}`,
+      class: `inline-flex items-center justify-center gap-2 rounded-md font-semibold transition focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${FOCUS} ${SIZES[size] || SIZES.md} ${VARIANTS[variant] || VARIANTS.primary} ${extra}`,
       "aria-label": ariaLabel,
+      "aria-busy": loading ? "true" : null,
     },
     leading,
     label,
   );
-  if (disabled) node.disabled = true;
+  if (disabled || loading) node.disabled = true;
   if (onClick) node.addEventListener("click", onClick);
   return node;
+}
+
+/**
+ * Botón de solo icono. Exige `label` (texto accesible) y usa `title` para el
+ * tooltip nativo; el área táctil es de 44px.
+ */
+export function iconButton(
+  iconName,
+  { label, onClick, variant = "ghost", size = "md", class: extra = "" } = {},
+) {
+  if (!label) throw new Error("iconButton requiere un label accesible");
+  return button("", {
+    variant,
+    size,
+    iconName,
+    iconSize: 18,
+    ariaLabel: label,
+    class: `!px-0 ${size === "sm" ? "min-w-9" : "min-w-11"} ${extra}`,
+    onClick,
+  });
 }
 
 export function link(label, href, { class: extra = "" } = {}) {
   return h(
     "a",
-    { href, class: `inline-flex min-h-11 items-center font-medium text-blue-700 hover:text-blue-900 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${extra}`, "data-link": "true" },
+    {
+      href,
+      class: `inline-flex min-h-11 items-center font-medium text-primary hover:text-primary-hover hover:underline ${FOCUS} ${extra}`,
+      "data-link": "true",
+    },
     label,
   );
 }
 
-export function field(label, control, hint) {
+/**
+ * Campo etiquetado. El tercer argumento acepta un string (ayuda) o un objeto
+ * `{ hint, error }`; el error se anuncia con `role="alert"` y no depende solo
+ * del color.
+ */
+export function field(label, control, options) {
+  const hint = typeof options === "string" ? options : options?.hint;
+  const error = typeof options === "object" && options ? options.error : null;
   return h(
     "label",
-    { class: "block space-y-1" },
-    h("span", { class: "block text-sm font-medium text-slate-700" }, label),
+    { class: "block min-w-0 space-y-1" },
+    h("span", { class: "block text-sm font-medium text-foreground-secondary" }, label),
     control,
-    hint ? h("span", { class: "block text-xs text-slate-500" }, hint) : null,
+    error
+      ? h("span", { class: "block text-xs font-medium text-danger", role: "alert" }, error)
+      : hint
+        ? h("span", { class: "block text-xs text-muted" }, hint)
+        : null,
   );
 }
 
-export function input({ type = "text", name, value = "", placeholder = "", required = false, min, max, step, pattern, minlength, maxlength, autocomplete, accept, multiple } = {}) {
+export function input({
+  type = "text",
+  name,
+  value = "",
+  placeholder = "",
+  required = false,
+  min,
+  max,
+  step,
+  pattern,
+  minlength,
+  maxlength,
+  autocomplete,
+  accept,
+  multiple,
+} = {}) {
   return h("input", {
     type,
     name,
@@ -99,10 +163,8 @@ export function input({ type = "text", name, value = "", placeholder = "", requi
 }
 
 /**
- * Campo de contraseña con botón para mostrarla u ocultarla.
- *
- * Reutiliza `input()` y expone un botón accesible (foco por teclado, `aria-label`
- * y `aria-pressed` sincronizados). No interviene en el envío del formulario.
+ * Campo de contraseña con botón para mostrarla u ocultarla. Reutiliza `input()`
+ * y expone un botón accesible (`aria-label` y `aria-pressed` sincronizados).
  */
 export function passwordInput({
   name = "password",
@@ -124,8 +186,7 @@ export function passwordInput({
     "button",
     {
       type: "button",
-      class:
-        "absolute inset-y-0 right-0 flex min-w-11 items-center justify-center rounded-r-lg text-slate-500 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500",
+      class: `absolute inset-y-0 right-0 flex min-w-11 items-center justify-center rounded-r-md text-muted hover:text-foreground ${FOCUS}`,
       "aria-label": "Mostrar contraseña",
       "aria-pressed": "false",
     },
@@ -142,61 +203,79 @@ export function passwordInput({
   return h("div", { class: "relative" }, control, toggle);
 }
 
-export function textarea({ name, value = "", placeholder = "", rows = 4, required = false, minlength } = {}) {
-  return h("textarea", { name, rows, placeholder, required, minlength, class: "field-input" }, value);
+export function textarea({
+  name,
+  value = "",
+  placeholder = "",
+  rows = 4,
+  required = false,
+  minlength,
+} = {}) {
+  return h(
+    "textarea",
+    { name, rows, placeholder, required, minlength, class: "field-input" },
+    value,
+  );
 }
 
 export function select(name, options, { value = "", required = false } = {}) {
   const node = h("select", { name, required, class: "field-input" });
   for (const option of options) {
     node.append(
-      h("option", { value: option.value, selected: String(option.value) === String(value) }, option.label),
+      h(
+        "option",
+        { value: option.value, selected: String(option.value) === String(value) },
+        option.label,
+      ),
     );
   }
   return node;
 }
 
 export function card(...children) {
-  return h("div", { class: "rounded-xl border border-slate-200 bg-white p-5 shadow-sm" }, ...children);
+  return h("div", { class: "min-w-0 rounded-lg border border-border bg-surface p-4" }, ...children);
 }
 
 export function sectionTitle(title, actions) {
   return h(
     "div",
     { class: "flex flex-wrap items-center justify-between gap-2" },
-    h("h2", { class: "text-lg font-semibold text-slate-900" }, title),
+    h("h2", { class: "text-lg font-semibold text-foreground" }, title),
     actions || null,
   );
 }
 
+const BADGE = {
+  open: "bg-primary-tint text-primary",
+  quoted: "bg-warning-tint text-warning",
+  accepted: "bg-primary-tint text-primary",
+  in_progress: "bg-info-tint text-info",
+  completed: "bg-success-tint text-success",
+  cancelled: "bg-danger-tint text-danger",
+  pending: "bg-surface-hover text-foreground-secondary",
+  rejected: "bg-danger-tint text-danger",
+  withdrawn: "bg-surface-hover text-muted",
+  archived: "bg-surface-strong text-foreground-secondary",
+  closed: "bg-surface-strong text-foreground-secondary",
+  awaiting_receipt: "bg-surface-hover text-foreground-secondary",
+  received: "bg-primary-tint text-primary",
+  diagnosis: "bg-primary-tint text-primary",
+  waiting_customer: "bg-warning-tint text-warning",
+  waiting_part: "bg-warning-tint text-warning",
+  in_repair: "bg-info-tint text-info",
+  testing: "bg-primary-tint text-primary",
+  ready: "bg-success-tint text-success",
+  repaired: "bg-success-tint text-success",
+  not_repairable: "bg-danger-tint text-danger",
+  approved: "bg-success-tint text-success",
+};
+
 export function badge(value, label) {
-  const palette = {
-    open: "bg-blue-100 text-blue-800",
-    quoted: "bg-amber-100 text-amber-800",
-    accepted: "bg-indigo-100 text-indigo-800",
-    in_progress: "bg-cyan-100 text-cyan-800",
-    completed: "bg-emerald-100 text-emerald-800",
-    cancelled: "bg-red-100 text-red-800",
-    pending: "bg-slate-100 text-slate-700",
-    rejected: "bg-red-100 text-red-700",
-    withdrawn: "bg-slate-100 text-slate-600",
-    archived: "bg-slate-200 text-slate-700",
-    closed: "bg-slate-200 text-slate-700",
-    awaiting_receipt: "bg-slate-100 text-slate-700",
-    received: "bg-blue-100 text-blue-800",
-    diagnosis: "bg-indigo-100 text-indigo-800",
-    waiting_customer: "bg-amber-100 text-amber-800",
-    waiting_part: "bg-amber-100 text-amber-800",
-    in_repair: "bg-cyan-100 text-cyan-800",
-    testing: "bg-violet-100 text-violet-800",
-    ready: "bg-emerald-100 text-emerald-800",
-    repaired: "bg-emerald-100 text-emerald-800",
-    not_repairable: "bg-red-100 text-red-700",
-    approved: "bg-emerald-100 text-emerald-800",
-  };
   return h(
     "span",
-    { class: `inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${palette[value] || "bg-slate-100 text-slate-700"}` },
+    {
+      class: `inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${BADGE[value] || "bg-surface-hover text-foreground-secondary"}`,
+    },
     label || statusLabel(value),
   );
 }
@@ -204,12 +283,15 @@ export function badge(value, label) {
 export function pageHeader(title, subtitle, actions) {
   return h(
     "div",
-    { class: "flex flex-col gap-3 border-b border-slate-200 pb-5 sm:flex-row sm:items-center sm:justify-between" },
+    {
+      class:
+        "flex flex-col gap-3 border-b border-border pb-5 sm:flex-row sm:items-center sm:justify-between",
+    },
     h(
       "div",
       {},
-      h("h1", { class: "text-2xl font-bold text-slate-900" }, title),
-      subtitle ? h("p", { class: "mt-1 text-sm text-slate-500" }, subtitle) : null,
+      h("h1", { class: "text-2xl font-bold text-foreground" }, title),
+      subtitle ? h("p", { class: "mt-1 text-sm text-muted" }, subtitle) : null,
     ),
     actions ? h("div", { class: "flex flex-wrap gap-2" }, actions) : null,
   );

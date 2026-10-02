@@ -37,23 +37,23 @@ export function quotationCard(quotation, { isOwner }) {
       h(
         "div",
         {},
-        h("p", { class: "font-semibold text-slate-800" }, technician.full_name),
+        h("p", { class: "font-semibold text-foreground" }, technician.full_name),
         h(
           "div",
           { class: "mt-1 flex flex-wrap items-center gap-3" },
-          h("span", { class: "inline-flex items-center gap-2" }, stars(technician.rating_avg, { showValue: true }), h("span", { class: "text-xs text-slate-500" }, `${technician.rating_count} reseñas`)),
+          h("span", { class: "inline-flex items-center gap-2" }, stars(technician.rating_avg, { showValue: true }), h("span", { class: "text-xs text-muted" }, `${technician.rating_count} reseñas`)),
           verifiedBadge(technician.is_verified),
-          technician.district_name ? h("span", { class: "inline-flex items-center gap-1 text-xs text-slate-500" }, icon("map-pin", { size: 12 }), technician.district_name) : null,
+          technician.district_name ? h("span", { class: "inline-flex items-center gap-1 text-xs text-muted" }, icon("map-pin", { size: 12 }), technician.district_name) : null,
         ),
-        h("p", { class: "mt-1 text-xs text-slate-500" }, `${formatDate(quotation.created_at)} · ${quotation.estimated_days} día(s)`),
+        h("p", { class: "mt-1 text-xs text-muted" }, `${formatDate(quotation.created_at)} · ${quotation.estimated_days} día(s)`),
       ),
-      h("div", { class: "flex items-center gap-2" }, h("span", { class: "text-lg font-bold text-emerald-700" }, formatMoney(quotation.price)), badge(quotation.status)),
+      h("div", { class: "flex items-center gap-2" }, h("span", { class: "text-lg font-bold text-success" }, formatMoney(quotation.price)), badge(quotation.status)),
     ),
-    h("p", { class: "mt-3 text-sm text-slate-600" }, quotation.preliminary_diagnosis),
+    h("p", { class: "mt-3 text-sm text-foreground-secondary" }, quotation.preliminary_diagnosis),
     (quotation.items || []).length
       ? h(
           "ul",
-          { class: "mt-3 space-y-1 text-sm text-slate-600" },
+          { class: "mt-3 space-y-1 text-sm text-foreground-secondary" },
           quotation.items.map((item) =>
             h(
               "li",
@@ -67,28 +67,28 @@ export function quotationCard(quotation, { isOwner }) {
     reviews.length
       ? h(
           "details",
-          { class: "mt-3 rounded-lg bg-slate-50 p-3 text-sm" },
-          h("summary", { class: "cursor-pointer font-medium text-slate-700" }, `Reseñas recientes (${reviews.length})`),
+          { class: "mt-3 rounded-lg bg-background p-3 text-sm" },
+          h("summary", { class: "cursor-pointer font-medium text-foreground-secondary" }, `Reseñas recientes (${reviews.length})`),
           h(
             "div",
             { class: "mt-2 space-y-2" },
             reviews.map((review) =>
               h(
                 "div",
-                { class: "rounded-lg bg-white p-2.5" },
+                { class: "rounded-lg bg-surface p-2.5" },
                 h(
                   "div",
                   { class: "flex items-center justify-between gap-2" },
-                  h("span", { class: "text-xs font-semibold text-slate-700" }, review.customer_name),
+                  h("span", { class: "text-xs font-semibold text-foreground-secondary" }, review.customer_name),
                   stars(review.rating, { size: 12 }),
                 ),
-                review.comment ? h("p", { class: "mt-1 text-xs text-slate-600" }, review.comment) : null,
-                h("p", { class: "mt-0.5 text-[11px] text-slate-500" }, formatDate(review.created_at)),
+                review.comment ? h("p", { class: "mt-1 text-xs text-foreground-secondary" }, review.comment) : null,
+                h("p", { class: "mt-0.5 text-[11px] text-muted" }, formatDate(review.created_at)),
               ),
             ),
           ),
         )
-      : h("p", { class: "mt-2 text-xs text-slate-500" }, "Este técnico aún no tiene reseñas."),
+      : h("p", { class: "mt-2 text-xs text-muted" }, "Este técnico aún no tiene reseñas."),
     canAccept
       ? h(
           "div",
@@ -142,5 +142,5 @@ export function quoteFormCard(requestId) {
       submit.disabled = false;
     }
   });
-  return card(h("h3", { class: "mb-3 text-lg font-semibold text-slate-900" }, "Enviar cotización"), form);
+  return card(h("h3", { class: "mb-3 text-lg font-semibold text-foreground" }, "Enviar cotización"), form);
 }

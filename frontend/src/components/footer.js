@@ -31,13 +31,13 @@ const LEGAL_LINKS = [
 ];
 
 const LINK_CLASS =
-  "inline-flex min-h-11 items-center gap-1.5 rounded text-sm text-slate-600 transition-colors hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2";
+  "inline-flex min-h-11 items-center gap-1.5 rounded text-sm text-foreground-secondary transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
 function legalLink({ label, path, iconName }) {
   return h(
     "a",
     { href: path, "data-link": "true", class: LINK_CLASS },
-    h("span", { class: "text-slate-500", "aria-hidden": "true" }, icon(iconName, { size: 14 })),
+    h("span", { class: "text-muted", "aria-hidden": "true" }, icon(iconName, { size: 14 })),
     label,
   );
 }
@@ -49,7 +49,7 @@ function legalLink({ label, path, iconName }) {
 export function createFooter() {
   return h(
     "footer",
-    { class: "mt-10 shrink-0 border-t border-slate-200 bg-white" },
+    { class: "mt-10 shrink-0 border-t border-border bg-surface" },
     h(
       "div",
       { class: "mx-auto max-w-6xl px-4 py-6" },
@@ -69,16 +69,16 @@ export function createFooter() {
           h(
             "div",
             { class: "leading-tight" },
-            h("p", { class: "text-xs text-slate-500" }, "Reparación de dispositivos en Perú"),
+            h("p", { class: "text-xs text-muted" }, "Reparación de dispositivos en Perú"),
           ),
         ),
-        h("span", { class: "text-xs text-slate-500" }, String(new Date().getFullYear())),
+        h("span", { class: "text-xs text-muted" }, String(new Date().getFullYear())),
       ),
       h(
         "nav",
         {
           class:
-            "mt-4 flex flex-wrap justify-center gap-x-6 gap-y-2 border-t border-slate-100 pt-4",
+            "mt-4 flex flex-wrap justify-center gap-x-6 gap-y-2 border-t border-border-subtle pt-4",
           "aria-label": "Enlaces legales",
         },
         LEGAL_LINKS.map((link) => legalLink(link)),

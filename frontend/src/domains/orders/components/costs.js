@@ -46,7 +46,7 @@ export function costsCard(order, { canManage, onChanged }) {
   const children = [
     h(
       "h3",
-      { class: "mb-3 flex items-center gap-2 text-lg font-semibold text-slate-900" },
+      { class: "mb-3 flex items-center gap-2 text-lg font-semibold text-foreground" },
       icon("receipt", { size: 18 }),
       "Costos",
     ),
@@ -63,22 +63,22 @@ export function costsCard(order, { canManage, onChanged }) {
               { class: "flex items-center justify-between" },
               h(
                 "dt",
-                { class: "text-slate-600" },
+                { class: "text-foreground-secondary" },
                 `${statusLabel(item.kind)}${item.description ? `: ${item.description}` : ""}`,
               ),
-              h("dd", { class: "font-medium text-slate-800" }, formatMoney(item.amount)),
+              h("dd", { class: "font-medium text-foreground" }, formatMoney(item.amount)),
             ),
           ),
           h(
             "div",
             {
-              class: "mt-2 flex items-center justify-between border-t border-slate-200 pt-2 font-semibold text-slate-900",
+              class: "mt-2 flex items-center justify-between border-t border-border pt-2 font-semibold text-foreground",
             },
             h("dt", {}, "Precio final"),
             h("dd", {}, formatMoney(order.final_price)),
           ),
         )
-      : h("p", { class: "text-sm text-slate-500" }, "Sin costos registrados."),
+      : h("p", { class: "text-sm text-muted" }, "Sin costos registrados."),
   );
 
   if (canManage && !terminal) {
@@ -99,7 +99,7 @@ export function costsCard(order, { canManage, onChanged }) {
       field("Descripción", descriptionInput),
       h(
         "label",
-        { class: "flex items-center gap-2 text-sm text-slate-700" },
+        { class: "flex items-center gap-2 text-sm text-foreground-secondary" },
         visibleCheckbox,
         "Mostrar este costo al cliente",
       ),

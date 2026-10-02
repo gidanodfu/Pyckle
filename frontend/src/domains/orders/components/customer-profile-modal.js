@@ -41,29 +41,29 @@ export function customerProfileModal(profile) {
         { class: "flex items-center gap-3" },
         h(
           "span",
-          { class: "flex h-11 w-11 items-center justify-center rounded-full bg-blue-100 text-blue-800" },
+          { class: "flex h-11 w-11 items-center justify-center rounded-full bg-primary-tint text-primary" },
           icon("user", { size: 20 }),
         ),
         h(
           "div",
           {},
-          h("p", { class: "text-lg font-semibold text-slate-900" }, profile.full_name),
-          h("p", { class: "text-xs text-slate-500" }, `Miembro desde ${memberSince}`),
+          h("p", { class: "text-lg font-semibold text-foreground" }, profile.full_name),
+          h("p", { class: "text-xs text-muted" }, `Miembro desde ${memberSince}`),
         ),
       ),
       h(
         "div",
         { class: "grid gap-3 sm:grid-cols-2" },
         card(
-          h("p", { class: "text-xs uppercase tracking-wide text-slate-500" }, "Reparaciones realizadas"),
-          h("p", { class: "mt-1 text-xl font-bold text-emerald-700" }, String(profile.completed_repairs)),
+          h("p", { class: "text-xs uppercase tracking-wide text-muted" }, "Reparaciones realizadas"),
+          h("p", { class: "mt-1 text-xl font-bold text-success" }, String(profile.completed_repairs)),
         ),
         card(
-          h("p", { class: "text-xs uppercase tracking-wide text-slate-500" }, "Ubicación"),
-          h("p", { class: "mt-1 text-sm font-medium text-slate-700" }, location || "-"),
+          h("p", { class: "text-xs uppercase tracking-wide text-muted" }, "Ubicación"),
+          h("p", { class: "mt-1 text-sm font-medium text-foreground-secondary" }, location || "-"),
         ),
       ),
-      h("p", { class: "text-xs text-slate-500" }, "La dirección exacta solo se comparte cuando corresponde a una reparación a domicilio aceptada."),
+      h("p", { class: "text-xs text-muted" }, "La dirección exacta solo se comparte cuando corresponde a una reparación a domicilio aceptada."),
     ),
   );
 }

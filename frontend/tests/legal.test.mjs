@@ -88,7 +88,7 @@ test("el footer enlaza los 5 documentos y navega sin recarga", async () => {
   // Iconos decorativos secundarios: uno por enlace y nunca anunciados dos veces.
   assert.equal(links.filter((link) => link.querySelector('[aria-hidden="true"] svg')).length, 5);
   assert.ok(links.every((link) => link.className.includes("text-sm")));
-  assert.ok(links.every((link) => link.className.includes("hover:text-blue-700")));
+  assert.ok(links.every((link) => link.className.includes("hover:text-primary")));
   assert.ok(links.every((link) => link.className.includes("focus-visible:ring-2")));
   assert.equal(window.document.querySelector("footer").querySelectorAll("[data-icon-missing]").length, 0);
 

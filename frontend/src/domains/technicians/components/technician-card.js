@@ -35,22 +35,22 @@ export function technicianCard(technician) {
         {},
         h(
           "p",
-          { class: "inline-flex items-center gap-1.5 text-lg font-semibold text-slate-900" },
+          { class: "inline-flex items-center gap-1.5 text-lg font-semibold text-foreground" },
           technician.full_name,
           verifiedBadge(technician.is_verified),
         ),
-        h("p", { class: "text-xs text-slate-500" }, `${technician.experience_years} años de experiencia`),
+        h("p", { class: "text-xs text-muted" }, `${technician.experience_years} años de experiencia`),
         location
-          ? h("p", { class: "mt-1 inline-flex items-center gap-1 text-xs text-slate-500" }, icon("map-pin", { size: 13 }), location)
+          ? h("p", { class: "mt-1 inline-flex items-center gap-1 text-xs text-muted" }, icon("map-pin", { size: 13 }), location)
           : null,
       ),
     ),
-    h("p", { class: "mt-3 line-clamp-3 text-sm text-slate-600" }, technician.bio || "Técnico sin descripción."),
+    h("p", { class: "mt-3 line-clamp-3 text-sm text-foreground-secondary" }, technician.bio || "Técnico sin descripción."),
     h(
       "div",
       { class: "mt-3 flex flex-wrap gap-2" },
       (technician.specialties || []).map((specialty) =>
-        h("span", { class: "rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600" }, specialty.name),
+        h("span", { class: "rounded-full bg-surface-hover px-2 py-0.5 text-xs text-foreground-secondary" }, specialty.name),
       ),
     ),
     h(
@@ -60,7 +60,7 @@ export function technicianCard(technician) {
         "span",
         { class: "inline-flex items-center gap-2" },
         stars(technician.rating_avg, { showValue: true }),
-        h("span", { class: "text-xs text-slate-500" }, `(${technician.rating_count})`),
+        h("span", { class: "text-xs text-muted" }, `(${technician.rating_count})`),
       ),
       button("Ver perfil", { variant: "outline", iconName: "user", onClick: () => navigate(routes.technicianProfile(technician.id)) }),
     ),

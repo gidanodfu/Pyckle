@@ -22,11 +22,11 @@ import { formatDateTime, h, statusLabel } from "../../../components/dom.js";
 import { icon } from "../../../components/icons.js";
 
 const DOT = {
-  completed: "bg-emerald-600",
-  cancelled: "bg-red-500",
-  not_repairable: "bg-red-500",
-  received: "bg-blue-700",
-  report_generated: "bg-indigo-600",
+  completed: "bg-success",
+  cancelled: "bg-danger",
+  not_repairable: "bg-danger",
+  received: "bg-primary",
+  report_generated: "bg-primary",
 };
 
 /**
@@ -35,11 +35,11 @@ const DOT = {
  */
 export function orderTimeline(events, { emptyLabel = "Sin eventos todavía." } = {}) {
   if (!events || !events.length) {
-    return h("p", { class: "text-sm text-slate-500" }, emptyLabel);
+    return h("p", { class: "text-sm text-muted" }, emptyLabel);
   }
   return h(
     "ol",
-    { class: "relative space-y-4 border-l border-slate-200 pl-6" },
+    { class: "relative space-y-4 border-l border-border pl-6" },
     events.map((event) =>
       h(
         "li",
@@ -48,21 +48,21 @@ export function orderTimeline(events, { emptyLabel = "Sin eventos todavía." } =
           "span",
           {
             class: `absolute -left-[31px] top-1 flex h-3 w-3 items-center justify-center rounded-full ${
-              DOT[event.new_status] || DOT[event.event_type] || "bg-slate-400"
+              DOT[event.new_status] || DOT[event.event_type] || "bg-surface-strong"
             }`,
           },
         ),
         h(
           "p",
-          { class: "text-sm font-semibold text-slate-800" },
+          { class: "text-sm font-semibold text-foreground" },
           statusLabel(event.new_status || event.event_type),
         ),
         event.description
-          ? h("p", { class: "text-sm text-slate-600" }, event.description)
+          ? h("p", { class: "text-sm text-foreground-secondary" }, event.description)
           : null,
         h(
           "p",
-          { class: "mt-0.5 inline-flex items-center gap-1 text-xs text-slate-500" },
+          { class: "mt-0.5 inline-flex items-center gap-1 text-xs text-muted" },
           icon("clock", { size: 12 }),
           formatDateTime(event.created_at),
           event.actor ? ` · ${event.actor.full_name}` : "",

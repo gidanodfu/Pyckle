@@ -78,10 +78,10 @@ export function technicalStatusStepper(status) {
         {
           class: `inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium ${
             active
-              ? "bg-blue-700 text-white"
+              ? "bg-primary text-primary-foreground"
               : done
-                ? "bg-emerald-50 text-emerald-700"
-                : "bg-slate-100 text-slate-500"
+                ? "bg-success-tint text-success"
+                : "bg-surface-hover text-muted"
           }`,
         },
         icon(active ? activeIcon : done ? "check" : "clock", { size: 12 }),

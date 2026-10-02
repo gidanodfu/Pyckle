@@ -40,9 +40,9 @@ export function googleAuthButton(
     const dividerNode = h(
       "div",
       { class: "my-4 flex items-center gap-3" },
-      h("span", { class: "h-px flex-1 bg-slate-200" }),
-      h("span", { class: "text-xs uppercase tracking-wide text-slate-500" }, "o"),
-      h("span", { class: "h-px flex-1 bg-slate-200" }),
+      h("span", { class: "h-px flex-1 bg-surface-strong" }),
+      h("span", { class: "text-xs uppercase tracking-wide text-muted" }, "o"),
+      h("span", { class: "h-px flex-1 bg-surface-strong" }),
     );
     const googleButton = button(label, {
       variant: "neutral",

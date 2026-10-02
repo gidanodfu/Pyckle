@@ -35,17 +35,17 @@ import { authShell, submitHandler } from "./shell.js";
 function googleVerifiedCard(info) {
   return h(
     "div",
-    { class: "space-y-1 rounded-lg border border-emerald-200 bg-emerald-50 p-4" },
+    { class: "space-y-1 rounded-lg border border-border bg-success-tint p-4" },
     h(
       "p",
-      { class: "flex items-center gap-2 text-sm font-semibold text-emerald-800" },
+      { class: "flex items-center gap-2 text-sm font-semibold text-success" },
       googleIcon({ size: 18 }),
       "Cuenta de Google verificada",
     ),
-    h("p", { class: "text-sm font-medium text-slate-800" }, info.email),
+    h("p", { class: "text-sm font-medium text-foreground" }, info.email),
     h(
       "p",
-      { class: "text-xs text-slate-600" },
+      { class: "text-xs text-foreground-secondary" },
       "Completa tus datos para crear tu cuenta en Pyckle.",
     ),
   );
@@ -59,16 +59,16 @@ export function Register() {
   const location = locationFields({ required: true, hint: "La ubicación es obligatoria para conectar con técnicos de tu zona." });
 
   const phoneInput = input({ name: "phone", type: "tel", required: true, placeholder: "+51 999 123 456", autocomplete: "tel" });
-  const phoneHint = h("span", { class: "block text-xs text-slate-500" }, "Celular peruano de 9 dígitos.");
-  const phoneError = h("span", { class: "block text-xs font-medium text-red-600 hidden" }, PHONE_ERROR);
+  const phoneHint = h("span", { class: "block text-xs text-muted" }, "Celular peruano de 9 dígitos.");
+  const phoneError = h("span", { class: "block text-xs font-medium text-danger hidden" }, PHONE_ERROR);
   phoneInput.addEventListener("input", () => {
     try {
       normalizePhone(phoneInput.value);
       phoneError.classList.add("hidden");
-      phoneInput.classList.remove("border-red-400");
+      phoneInput.classList.remove("border-danger");
     } catch {
       phoneError.classList.remove("hidden");
-      phoneInput.classList.add("border-red-400");
+      phoneInput.classList.add("border-danger");
     }
   });
 
@@ -103,15 +103,15 @@ export function Register() {
   });
   const termsError = h(
     "p",
-    { id: "register-terms-error", class: "hidden text-xs font-medium text-red-600" },
+    { id: "register-terms-error", class: "hidden text-xs font-medium text-danger" },
     "Debes aceptar los Términos y Condiciones para crear tu cuenta.",
   );
   const termsBlock = h(
     "div",
-    { class: "space-y-1 rounded-lg border border-slate-200 bg-slate-50 p-4" },
+    { class: "space-y-1 rounded-lg border border-border bg-background p-4" },
     h(
       "label",
-      { class: "flex items-start gap-2 text-sm text-slate-700" },
+      { class: "flex items-start gap-2 text-sm text-foreground-secondary" },
       termsCheckbox,
       h(
         "span",
@@ -123,7 +123,7 @@ export function Register() {
             href: routes.terms,
             target: "_blank",
             rel: "noopener noreferrer",
-            class: "font-medium text-blue-700 hover:underline",
+            class: "font-medium text-primary hover:underline",
           },
           "Términos y Condiciones",
         ),
@@ -150,8 +150,8 @@ export function Register() {
   const oauthNotice = oauthToken
     ? h(
         "div",
-        { class: "rounded-lg border border-slate-200 bg-slate-50 p-4" },
-        h("p", { class: "text-sm text-slate-600" }, "Verificando tu cuenta de Google..."),
+        { class: "rounded-lg border border-border bg-background p-4" },
+        h("p", { class: "text-sm text-foreground-secondary" }, "Verificando tu cuenta de Google..."),
       )
     : null;
   if (oauthToken) {
@@ -202,7 +202,7 @@ export function Register() {
     h(
       "div",
       { class: "space-y-3" },
-      h("p", { class: "flex items-center gap-2 text-sm font-semibold text-slate-700" }, icon("map-pin", { size: 16 }), "Ubicación"),
+      h("p", { class: "flex items-center gap-2 text-sm font-semibold text-foreground-secondary" }, icon("map-pin", { size: 16 }), "Ubicación"),
       location.node,
     ),
     customerAddress,
@@ -212,9 +212,9 @@ export function Register() {
     submitButton,
     h(
       "p",
-      { class: "text-center text-sm text-slate-500" },
+      { class: "text-center text-sm text-muted" },
       "¿Ya tienes cuenta? ",
-      h("a", { href: routes.login, "data-link": "true", class: "font-medium text-blue-700 hover:underline" }, "Inicia sesión"),
+      h("a", { href: routes.login, "data-link": "true", class: "font-medium text-primary hover:underline" }, "Inicia sesión"),
     ),
   );
   syncRoleFields();
