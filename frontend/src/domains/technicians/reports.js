@@ -21,7 +21,7 @@
 import { api } from "../../api/client.js";
 import { endpoints } from "../../api/endpoints.js";
 import { formatDateTime, formatMoney, h } from "../../components/dom.js";
-import { Container } from "../../components/layout/index.js";
+import { PanelShell } from "../../components/layout/index.js";
 import { badge, button, emptyState, pageHeader, table, withBusy } from "../../components/ui/index.js";
 import { routes } from "../../lib/paths.js";
 import { navigate } from "../../lib/navigation.js";
@@ -78,9 +78,11 @@ export async function TechnicianReports() {
         { iconName: "file-text" },
       );
 
-  return Container(
-    pageHeader("Informes de reparación", "Documentos de cierre de tus reparaciones finalizadas."),
-    technicianNav("reports"),
-    h("div", { class: "mt-6" }, content),
+  return PanelShell(
+    {
+      header: pageHeader("Informes de reparación", "Documentos de cierre de tus reparaciones finalizadas."),
+      navigation: technicianNav("reports"),
+    },
+    content,
   );
 }

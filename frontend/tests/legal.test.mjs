@@ -110,7 +110,7 @@ test("el logo oficial aparece en navbar, login, registro y footer", async () => 
   await waitFor(() => window.document.querySelector('header img[alt="Pyckle"]'));
   const navbarLogo = window.document.querySelector('header img[alt="Pyckle"]');
   assert.ok(navbarLogo.getAttribute("src").includes("Pyckle-256"));
-  assert.equal(navbarLogo.getAttribute("width"), "34");
+  assert.equal(navbarLogo.getAttribute("width"), "32");
 
   const footerLogo = window.document.querySelector('footer img[alt="Pyckle"]');
   assert.ok(footerLogo.getAttribute("src").includes("Pyckle-64"));

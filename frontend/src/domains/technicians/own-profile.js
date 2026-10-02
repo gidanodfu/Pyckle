@@ -22,7 +22,7 @@ import { api } from "../../api/client.js";
 import { endpoints } from "../../api/endpoints.js";
 import { h } from "../../components/dom.js";
 import { locationFields } from "../../components/geo.js";
-import { Container } from "../../components/layout/index.js";
+import { PanelShell } from "../../components/layout/index.js";
 import { alert, button, card, field, input, pageHeader, textarea } from "../../components/ui/index.js";
 import { routes } from "../../lib/paths.js";
 import { serviceModalityFields } from "./components/service-modality.js";
@@ -109,12 +109,11 @@ export async function TechnicianOwnProfile() {
     }
   });
 
-  return Container(
-    h(
-      "div",
-      { class: "mx-auto max-w-2xl" },
-      pageHeader("Perfil profesional", "Completa tu información para recibir más solicitudes de tu zona."),
-      h("div", { class: "mt-6" }, card(form)),
-    ),
+  return PanelShell(
+    {
+      header: pageHeader("Perfil profesional", "Completa tu información para recibir más solicitudes de tu zona."),
+      class: "mx-auto max-w-2xl",
+    },
+    card(form),
   );
 }

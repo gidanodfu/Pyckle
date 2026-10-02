@@ -22,7 +22,7 @@ import { api } from "../../api/client.js";
 import { endpoints } from "../../api/endpoints.js";
 import { formatDateTime, formatMoney, h, statusLabel } from "../../components/dom.js";
 import { icon } from "../../components/icons.js";
-import { Container } from "../../components/layout/index.js";
+import { PanelShell } from "../../components/layout/index.js";
 import {
   badge,
   button,
@@ -223,15 +223,17 @@ export async function OrderDetail({ id }) {
     side.push(closeActionsCard(order, reload));
   }
 
-  return Container(
-    pageHeader(
-      `Reparación ${order.id.slice(0, 8)}`,
-      `${order.request.title} · ${formatMoney(order.final_price)}`,
-      actions,
-    ),
+  return PanelShell(
+    {
+      header: pageHeader(
+        `Reparación ${order.id.slice(0, 8)}`,
+        `${order.request.title} · ${formatMoney(order.final_price)}`,
+        actions,
+      ),
+    },
     h(
       "div",
-      { class: "mt-6 grid gap-6 lg:grid-cols-3" },
+      { class: "grid gap-6 lg:grid-cols-3" },
       h("div", { class: "space-y-6 lg:col-span-2" }, ...columns),
       h("div", { class: "space-y-6" }, ...side, reportCard, reviewCard, reviewShown),
     ),

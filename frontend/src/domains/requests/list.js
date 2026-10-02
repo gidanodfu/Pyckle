@@ -21,8 +21,8 @@
 import { api } from "../../api/client.js";
 import { endpoints } from "../../api/endpoints.js";
 import { formatDate, h, statusLabel } from "../../components/dom.js";
-import { Container } from "../../components/layout/index.js";
-import { alert, badge, button, emptyState, pageHeader, table } from "../../components/ui/index.js";
+import { PanelShell } from "../../components/layout/index.js";
+import { alert, badge, button, emptyState, pageHeader, section, table } from "../../components/ui/index.js";
 import { routes } from "../../lib/paths.js";
 import { navigate } from "../../lib/navigation.js";
 import { store } from "../../state/store.js";
@@ -44,9 +44,9 @@ export async function RequestsList() {
 
   if (roles.includes("admin")) {
     const data = await api.get(endpoints.admin.requests({ limit: 50 }));
-    return Container(
-      pageHeader("Solicitudes", "Moderación de todas las solicitudes del marketplace."),
-      h("div", { class: "mt-6" }, requestsTable(data.items, { admin: true })),
+    return PanelShell(
+      { header: pageHeader("Solicitudes", "Moderación de todas las solicitudes del marketplace.") },
+      requestsTable(data.items, { admin: true }),
     );
   }
 
@@ -56,35 +56,36 @@ export async function RequestsList() {
       api.get(endpoints.requests.list({ limit: 50 })),
     ]);
     const notice = expansionNotice(available.scope, available.expanded);
-    return Container(
-      pageHeader("Solicitudes", "Solicitudes compatibles con tus especialidades y tu zona."),
-      notice ? h("div", { class: "mt-6" }, notice) : null,
-      h("h2", { class: "mt-6 mb-3 text-lg font-semibold text-foreground" }, "Disponibles"),
-      h("div", { class: "mb-8" }, requestsTable(available.items)),
-      h("h2", { class: "mb-3 text-lg font-semibold text-foreground" }, "Mis solicitudes asignadas"),
-      requestsTable(mine.items),
+    return PanelShell(
+      {
+        header: pageHeader(
+          "Solicitudes",
+          "Solicitudes compatibles con tus especialidades y tu zona.",
+        ),
+      },
+      notice,
+      section({ title: "Disponibles" }, requestsTable(available.items)),
+      section({ title: "Mis solicitudes asignadas" }, requestsTable(mine.items)),
     );
   }
 
   const data = await api.get(endpoints.requests.list({ limit: 50 }));
-  return Container(
-    pageHeader(
-      "Mis solicitudes",
-      "Historial de solicitudes de reparación.",
-      button("Nueva solicitud", { iconName: "plus", onClick: () => navigate(routes.requestNew) }),
-    ),
-    h(
-      "div",
-      { class: "mt-6" },
-      data.items.length
-        ? requestsTable(data.items)
-        : emptyState(
-            "Sin solicitudes",
-            "Publica tu primer problema para recibir cotizaciones.",
-            button("Crear solicitud", { iconName: "plus", onClick: () => navigate(routes.requestNew) }),
-            { iconName: "clipboard-list" },
-          ),
-    ),
+  return PanelShell(
+    {
+      header: pageHeader(
+        "Mis solicitudes",
+        "Historial de solicitudes de reparación.",
+        button("Nueva solicitud", { iconName: "plus", onClick: () => navigate(routes.requestNew) }),
+      ),
+    },
+    data.items.length
+      ? requestsTable(data.items)
+      : emptyState(
+          "Sin solicitudes",
+          "Publica tu primer problema para recibir cotizaciones.",
+          button("Crear solicitud", { iconName: "plus", onClick: () => navigate(routes.requestNew) }),
+          { iconName: "clipboard-list" },
+        ),
   );
 }
 

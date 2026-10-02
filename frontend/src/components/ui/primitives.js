@@ -233,15 +233,10 @@ export function select(name, options, { value = "", required = false } = {}) {
 }
 
 export function card(...children) {
-  return h("div", { class: "min-w-0 rounded-lg border border-border bg-surface p-4" }, ...children);
-}
-
-export function sectionTitle(title, actions) {
   return h(
     "div",
-    { class: "flex flex-wrap items-center justify-between gap-2" },
-    h("h2", { class: "text-lg font-semibold text-foreground" }, title),
-    actions || null,
+    { class: "min-w-0 rounded-lg border border-border bg-surface-elevated p-4" },
+    ...children,
   );
 }
 

@@ -193,6 +193,10 @@ async function auditRoute(browser, storageState, route, vp) {
       overflow,
       worst,
       missingIcons: document.querySelectorAll("[data-icon-missing]").length,
+      renderError: (() => {
+        const el = document.querySelector('#view [role="alert"].text-danger');
+        return el ? (el.textContent || "").trim().slice(0, 160) : null;
+      })(),
     };
   });
 
@@ -254,6 +258,7 @@ for (const r of ROLES) {
       if (res.failedRequests.length) flags.push(`reqfail:${res.failedRequests.length}`);
       if (res.overflow > 1) flags.push(`overflow:${res.overflow}`);
       if (res.missingIcons) flags.push(`icons:${res.missingIcons}`);
+      if (res.renderError) flags.push(`render:${res.renderError}`);
       console.log(`${r.role.padEnd(10)} ${vp.name.padEnd(9)} ${route.padEnd(34)} ${flags.join(" ") || "ok"}`);
     }
   }
@@ -268,7 +273,8 @@ const bad = results.filter(
     r.badResponses.length ||
     r.failedRequests.length ||
     r.overflow > 1 ||
-    r.missingIcons,
+    r.missingIcons ||
+    r.renderError,
 );
 console.log(`\nTOTAL ${results.length} page loads; with findings: ${bad.length}`);
 console.log(`Report: ${join(OUT, "report.json")}`);

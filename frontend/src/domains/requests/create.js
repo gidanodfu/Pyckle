@@ -22,7 +22,7 @@ import { api } from "../../api/client.js";
 import { endpoints } from "../../api/endpoints.js";
 import { h } from "../../components/dom.js";
 import { locationFields } from "../../components/geo.js";
-import { Container } from "../../components/layout/index.js";
+import { PanelShell } from "../../components/layout/index.js";
 import {
   alert,
   button,
@@ -185,12 +185,11 @@ export async function RequestCreate() {
     }
   });
 
-  return Container(
-    h(
-      "div",
-      { class: "mx-auto max-w-3xl" },
-      pageHeader("Nueva solicitud", "Describe el problema para recibir cotizaciones de técnicos."),
-      h("div", { class: "mt-6" }, card(form)),
-    ),
+  return PanelShell(
+    {
+      header: pageHeader("Nueva solicitud", "Describe el problema para recibir cotizaciones de técnicos."),
+      class: "mx-auto max-w-3xl",
+    },
+    card(form),
   );
 }

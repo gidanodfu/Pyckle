@@ -19,9 +19,8 @@
  */
 
 import { h, statusLabel } from "../../../components/dom.js";
-import { button } from "../../../components/ui/index.js";
+import { pageNavigation } from "../../../components/layout/index.js";
 import { routes } from "../../../lib/paths.js";
-import { navigate } from "../../../lib/navigation.js";
 
 const LINKS = [
   { key: "resumen", label: "Resumen", path: routes.technicianDashboard, iconName: "layout-dashboard" },
@@ -36,17 +35,7 @@ const LINKS = [
 ];
 
 export function technicianNav(active) {
-  return h(
-    "nav",
-    { class: "mt-4 flex flex-wrap gap-2" },
-    LINKS.map((link) =>
-      button(link.label, {
-        variant: active === link.key ? "primary" : "ghost",
-        iconName: link.iconName,
-        onClick: () => navigate(link.path),
-      }),
-    ),
-  );
+  return pageNavigation(LINKS, active, { label: "Panel técnico" });
 }
 
 const STATUS_ORDER = [

@@ -21,8 +21,8 @@
 import { api } from "../../api/client.js";
 import { endpoints } from "../../api/endpoints.js";
 import { formatDate, h } from "../../components/dom.js";
-import { Container } from "../../components/layout/index.js";
-import { card, emptyState, pageHeader, stars, verifiedBadge } from "../../components/ui/index.js";
+import { PanelShell } from "../../components/layout/index.js";
+import { card, emptyState, pageHeader, section, stars, verifiedBadge } from "../../components/ui/index.js";
 
 export async function TechnicianProfile({ id }) {
   const [technician, reviews] = await Promise.all([
@@ -30,11 +30,9 @@ export async function TechnicianProfile({ id }) {
     api.get(endpoints.technicians.reviews(id), { auth: false }),
   ]);
 
-  return Container(
-    h(
-      "div",
-      { class: "mx-auto max-w-3xl" },
-      pageHeader(
+  return PanelShell(
+    {
+      header: pageHeader(
         h(
           "span",
           { class: "inline-flex items-center gap-2" },
@@ -43,43 +41,48 @@ export async function TechnicianProfile({ id }) {
         ),
         technician.bio || "Técnico de Pyckle",
       ),
-      h(
-        "div",
-        { class: "mt-6 grid gap-4 sm:grid-cols-3" },
-        card(
-          h("p", { class: "text-sm text-muted" }, "Experiencia"),
-          h("p", { class: "text-xl font-bold text-primary" }, `${technician.experience_years} años`),
-        ),
-        card(
-          h("p", { class: "text-sm text-muted" }, "Calificación"),
-          h("div", { class: "mt-1" }, stars(technician.rating_avg, { size: 18, showValue: true })),
-          h("p", { class: "text-xs text-muted" }, `${technician.rating_count} reseñas`),
-        ),
-        card(
-          h("p", { class: "text-sm text-muted" }, "Servicios"),
-          h(
-            "p",
-            { class: "text-sm font-medium text-foreground-secondary" },
-            [technician.offers_home_service ? "Domicilio" : null, technician.offers_workshop_service ? "Taller" : null]
-              .filter(Boolean)
-              .join(" y ") || "-",
-          ),
+      class: "mx-auto max-w-3xl",
+    },
+    h(
+      "div",
+      { class: "grid gap-4 sm:grid-cols-3" },
+      card(
+        h("p", { class: "text-sm text-muted" }, "Experiencia"),
+        h("p", { class: "text-xl font-bold text-primary" }, `${technician.experience_years} años`),
+      ),
+      card(
+        h("p", { class: "text-sm text-muted" }, "Calificación"),
+        h("div", { class: "mt-1" }, stars(technician.rating_avg, { size: 18, showValue: true })),
+        h("p", { class: "text-xs text-muted" }, `${technician.rating_count} reseñas`),
+      ),
+      card(
+        h("p", { class: "text-sm text-muted" }, "Servicios"),
+        h(
+          "p",
+          { class: "text-sm font-medium text-foreground-secondary" },
+          [technician.offers_home_service ? "Domicilio" : null, technician.offers_workshop_service ? "Taller" : null]
+            .filter(Boolean)
+            .join(" y ") || "-",
         ),
       ),
-      h("h2", { class: "mt-8 text-lg font-semibold text-foreground" }, "Especialidades"),
+    ),
+    section(
+      { title: "Especialidades" },
       h(
         "div",
-        { class: "mt-3 flex flex-wrap gap-2" },
+        { class: "flex flex-wrap gap-2" },
         (technician.specialties || []).length
           ? technician.specialties.map((specialty) =>
               h("span", { class: "rounded-full border border-border px-3 py-1 text-sm" }, specialty.name),
             )
           : h("p", { class: "text-sm text-muted" }, "Sin especialidades registradas."),
       ),
-      h("h2", { class: "mt-8 text-lg font-semibold text-foreground" }, `Reseñas (${reviews.length})`),
+    ),
+    section(
+      { title: `Reseñas (${reviews.length})` },
       h(
         "div",
-        { class: "mt-3 space-y-3" },
+        { class: "space-y-3" },
         reviews.length
           ? reviews.map((review) =>
               card(

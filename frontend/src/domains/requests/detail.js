@@ -22,8 +22,8 @@ import { api } from "../../api/client.js";
 import { endpoints } from "../../api/endpoints.js";
 import { formatDateTime, formatMoney, h, statusLabel } from "../../components/dom.js";
 import { icon } from "../../components/icons.js";
-import { Container } from "../../components/layout/index.js";
-import { badge, button, card, emptyState, pageHeader, verifiedBadge, withBusy } from "../../components/ui/index.js";
+import { PanelShell } from "../../components/layout/index.js";
+import { badge, button, card, emptyState, pageHeader, section, verifiedBadge, withBusy } from "../../components/ui/index.js";
 import { routes } from "../../lib/paths.js";
 import { navigate } from "../../lib/navigation.js";
 import { hasRole, store } from "../../state/store.js";
@@ -142,10 +142,8 @@ export async function RequestDetail({ id }) {
     );
   }
 
-  const quotationSection = h(
-    "section",
-    { class: "mt-8 space-y-3" },
-    h("h3", { class: "text-lg font-semibold text-foreground" }, `Cotizaciones (${quotations.length})`),
+  const quotationSection = section(
+    { title: `Cotizaciones (${quotations.length})` },
     quotations.length
       ? quotations.map((quotation) => quotationCard(quotation, { isOwner }))
       : emptyState(
@@ -161,11 +159,11 @@ export async function RequestDetail({ id }) {
       ? quoteFormCard(id)
       : null;
 
-  return Container(
-    pageHeader("Detalle de solicitud", `Publicada el ${formatDateTime(request.created_at)}`, actions),
+  return PanelShell(
+    { header: pageHeader("Detalle de solicitud", `Publicada el ${formatDateTime(request.created_at)}`, actions) },
     h(
       "div",
-      { class: "mt-6 grid gap-6 lg:grid-cols-3" },
+      { class: "grid gap-6 lg:grid-cols-3" },
       h("div", { class: "lg:col-span-2" }, info, quotationSection),
       h("div", { class: "space-y-6" }, quoteForm),
     ),

@@ -28,12 +28,12 @@ export {
   link,
   pageHeader,
   passwordInput,
-  sectionTitle,
   select,
   setContent,
   textarea,
 } from "./primitives.js";
 export { alert, emptyState, loadingList, spinner } from "./feedback.js";
+export { section } from "./section.js";
 export { stars, statCard, table, verifiedBadge } from "./data.js";
 export { closeAllModals, modal } from "./overlay.js";
 export { withBusy } from "./busy.js";

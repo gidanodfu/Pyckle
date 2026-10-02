@@ -115,7 +115,7 @@ export function table(columns, rows) {
   return h(
     "div",
     {
-      class: "responsive-table overflow-x-auto rounded-lg border border-border bg-surface",
+      class: "responsive-table overflow-x-auto rounded-lg border border-border bg-surface-elevated",
       tabindex: "0",
       role: "region",
       "aria-label": "Tabla de datos",

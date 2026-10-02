@@ -22,15 +22,8 @@ import { api } from "../../api/client.js";
 import { endpoints } from "../../api/endpoints.js";
 import { formatDate, h } from "../../components/dom.js";
 import { icon } from "../../components/icons.js";
-import { Container } from "../../components/layout/index.js";
-import {
-  badge,
-  button,
-  emptyState,
-  pageHeader,
-  sectionTitle,
-  statCard,
-} from "../../components/ui/index.js";
+import { PanelShell } from "../../components/layout/index.js";
+import { badge, button, emptyState, pageHeader, section, statCard } from "../../components/ui/index.js";
 import { navigate } from "../../lib/navigation.js";
 import { store } from "../../state/store.js";
 import { routes } from "../../lib/paths.js";
@@ -80,23 +73,25 @@ export async function CustomerDashboard() {
   const profile = me.customer_profile;
   const location = [profile?.district_name, profile?.province_name].filter(Boolean).join(", ");
 
-  return Container(
-    pageHeader(
-      `Hola, ${me.user.full_name.split(" ")[0]}`,
-      "Resumen de tus solicitudes y reparaciones.",
-      button("Nueva solicitud", { iconName: "plus", onClick: () => navigate(routes.requestNew) }),
-    ),
+  return PanelShell(
+    {
+      header: pageHeader(
+        `Hola, ${me.user.full_name.split(" ")[0]}`,
+        "Resumen de tus solicitudes y reparaciones.",
+        button("Nueva solicitud", { iconName: "plus", onClick: () => navigate(routes.requestNew) }),
+      ),
+    },
     location
       ? h(
           "p",
-          { class: "mt-4 inline-flex items-center gap-1.5 text-sm text-muted" },
+          { class: "inline-flex items-center gap-1.5 text-sm text-muted" },
           icon("map-pin", { size: 15 }),
           location,
         )
       : null,
     h(
       "div",
-      { class: "mt-6 grid gap-4 sm:grid-cols-3" },
+      { class: "grid gap-4 sm:grid-cols-3" },
       statCard("Solicitudes activas", active, { iconName: "clipboard-list" }),
       statCard("Reparaciones totales", orders.total, { iconName: "receipt-text" }),
       statCard("Reparaciones completadas", completed, {
@@ -104,13 +99,14 @@ export async function CustomerDashboard() {
         iconName: "circle-check",
       }),
     ),
-    h(
-      "div",
-      { class: "mt-8 space-y-3" },
-      sectionTitle(
-        "Solicitudes recientes",
-        button("Ver todas", { variant: "ghost", onClick: () => navigate(routes.requests) }),
-      ),
+    section(
+      {
+        title: "Solicitudes recientes",
+        actions: button("Ver todas", {
+          variant: "ghost",
+          onClick: () => navigate(routes.requests),
+        }),
+      },
       requests.items.length
         ? requests.items.map(requestRow)
         : emptyState(

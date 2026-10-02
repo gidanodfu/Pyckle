@@ -21,7 +21,7 @@
 import { api } from "../../api/client.js";
 import { endpoints } from "../../api/endpoints.js";
 import { formatDateTime, h } from "../../components/dom.js";
-import { Container } from "../../components/layout/index.js";
+import { masterDetail, PanelShell } from "../../components/layout/index.js";
 import { alert, badge, button, emptyState, pageHeader } from "../../components/ui/index.js";
 import { navigate } from "../../lib/navigation.js";
 import { store } from "../../state/store.js";
@@ -48,17 +48,13 @@ export async function ChatPage() {
   const conversations = await api.get(endpoints.conversations.list());
   if (generation !== chatGeneration) return null;
   if (!conversations.length) {
-    return Container(
-      pageHeader("Chat", "Conversaciones con clientes y técnicos."),
-      h(
-        "div",
-        { class: "mt-6" },
-        emptyState(
-          "Sin conversaciones",
-          "Las conversaciones se crean al aceptar una cotización.",
-          null,
-          { iconName: "message-square" },
-        ),
+    return PanelShell(
+      { header: pageHeader("Chat", "Conversaciones con clientes y técnicos.") },
+      emptyState(
+        "Sin conversaciones",
+        "Las conversaciones se crean al aceptar una cotización.",
+        null,
+        { iconName: "message-square" },
       ),
     );
   }
@@ -190,9 +186,13 @@ export async function ChatPage() {
     activeSocket = socket;
   }
 
-  return Container(
-    pageHeader("Chat", "Comunicación directa entre cliente y técnico."),
-    h("div", { class: "mt-6 grid gap-4 lg:grid-cols-[280px_1fr]" }, sidebar, pane),
+  return PanelShell(
+    { header: pageHeader("Chat", "Comunicación directa entre cliente y técnico.") },
+    masterDetail({
+      list: sidebar,
+      detail: pane,
+      class: "lg:grid-cols-[280px_minmax(0,1fr)]",
+    }),
   );
 }
 

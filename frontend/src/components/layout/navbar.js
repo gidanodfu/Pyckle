@@ -102,7 +102,9 @@ export function createNavbarController() {
       "hidden w-full flex-col gap-1 md:flex md:w-auto md:min-w-0 md:flex-1 md:flex-row md:flex-wrap md:items-center",
     id: "main-nav",
   });
-  const rightBox = h("div", { class: "ml-auto flex shrink-0 items-center gap-1" });
+  const rightBox = h("div", {
+    class: "ml-auto flex min-w-0 flex-wrap items-center justify-end gap-1",
+  });
   const menuButton = button("", {
     variant: "ghost",
     class: `!px-2 !py-2 min-h-11 min-w-11 md:hidden`,
@@ -113,14 +115,21 @@ export function createNavbarController() {
   menuButton.setAttribute("aria-controls", "main-nav");
   const node = h(
     "header",
-    { class: "sticky top-0 z-40 border-b border-border bg-surface/95 backdrop-blur" },
+    { class: "sticky top-0 z-40 bg-background/90 backdrop-blur" },
     h(
       "div",
-      { class: "mx-auto flex max-w-6xl flex-wrap items-center gap-2 px-4 py-3" },
-      h("span", { class: "mr-2 shrink-0" }, Logo({ size: 34 })),
-      menuButton,
-      linksBox,
-      rightBox,
+      { class: "mx-auto w-full max-w-6xl px-4 py-3" },
+      h(
+        "div",
+        {
+          class:
+            "flex w-full flex-wrap items-center gap-2 rounded-xl border border-border bg-surface px-3 py-2",
+        },
+        h("span", { class: "mr-1 shrink-0" }, Logo({ size: 32 })),
+        menuButton,
+        linksBox,
+        rightBox,
+      ),
     ),
   );
 

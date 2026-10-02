@@ -21,7 +21,7 @@
 import { api } from "../../api/client.js";
 import { endpoints } from "../../api/endpoints.js";
 import { formatDate, h } from "../../components/dom.js";
-import { Container } from "../../components/layout/index.js";
+import { PanelShell } from "../../components/layout/index.js";
 import {
   alert,
   badge,
@@ -51,7 +51,7 @@ export async function UsersPage() {
     { value: "", label: "Todos los roles" },
     ...roles.map((role) => ({ value: role.name, label: role.name })),
   ]);
-  const tableBox = h("div", { class: "mt-6" });
+  const tableBox = h("div", { class: "min-w-0" });
 
   function render(users) {
     if (!users.length) {
@@ -174,19 +174,20 @@ export async function UsersPage() {
     }
   }
 
-  return Container(
-    pageHeader("Gestión de usuarios", "Administra roles, estado y cuentas del marketplace."),
-    h(
-      "div",
-      { class: "mt-6" },
-      card(
-        h(
-          "div",
-          { class: "grid gap-4 sm:grid-cols-[1fr_220px_auto]" },
-          field("Buscar", searchInput),
-          field("Rol", roleSelect),
-          h("div", { class: "flex items-end" }, filterButton),
-        ),
+  return PanelShell(
+    {
+      header: pageHeader(
+        "Gestión de usuarios",
+        "Administra roles, estado y cuentas del marketplace.",
+      ),
+    },
+    card(
+      h(
+        "div",
+        { class: "grid gap-4 sm:grid-cols-[1fr_220px_auto]" },
+        field("Buscar", searchInput),
+        field("Rol", roleSelect),
+        h("div", { class: "flex items-end" }, filterButton),
       ),
     ),
     tableBox,

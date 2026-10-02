@@ -22,7 +22,7 @@ import { api } from "../../api/client.js";
 import { endpoints } from "../../api/endpoints.js";
 import { h } from "../../components/dom.js";
 import { locationFields } from "../../components/geo.js";
-import { Container } from "../../components/layout/index.js";
+import { PanelShell } from "../../components/layout/index.js";
 import { alert, button, card, field, input, pageHeader } from "../../components/ui/index.js";
 import { normalizePhone, PHONE_ERROR } from "../../lib/phone.js";
 import { store } from "../../state/store.js";
@@ -113,24 +113,23 @@ export function CustomerProfilePage() {
     .filter(Boolean)
     .join(", ");
 
-  return Container(
+  return PanelShell(
+    {
+      header: pageHeader("Mi perfil", "Actualiza tus datos de contacto, dirección y ubicación."),
+      class: "mx-auto max-w-2xl",
+    },
     h(
       "div",
-      { class: "mx-auto max-w-2xl" },
-      pageHeader("Mi perfil", "Actualiza tus datos de contacto, dirección y ubicación."),
-      h(
-        "div",
-        { class: "mt-6 grid gap-4 sm:grid-cols-2" },
-        card(
-          h("p", { class: "text-xs uppercase tracking-wide text-muted" }, "Ubicación actual"),
-          h("p", { class: "mt-1 font-medium text-foreground" }, currentLocation || "Sin registrar"),
-        ),
-        card(
-          h("p", { class: "text-xs uppercase tracking-wide text-muted" }, "Miembro desde"),
-          h("p", { class: "mt-1 font-medium text-foreground" }, me?.user?.created_at ? new Date(me.user.created_at).toLocaleDateString("es-PE", { day: "2-digit", month: "long", year: "numeric" }) : "-"),
-        ),
+      { class: "grid gap-4 sm:grid-cols-2" },
+      card(
+        h("p", { class: "text-xs uppercase tracking-wide text-muted" }, "Ubicación actual"),
+        h("p", { class: "mt-1 font-medium text-foreground" }, currentLocation || "Sin registrar"),
       ),
-      h("div", { class: "mt-6" }, card(form)),
+      card(
+        h("p", { class: "text-xs uppercase tracking-wide text-muted" }, "Miembro desde"),
+        h("p", { class: "mt-1 font-medium text-foreground" }, me?.user?.created_at ? new Date(me.user.created_at).toLocaleDateString("es-PE", { day: "2-digit", month: "long", year: "numeric" }) : "-"),
+      ),
     ),
+    card(form),
   );
 }

@@ -18,8 +18,20 @@
  * along with Pyckle. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export { Container } from "./container.js";
-export { createNavbarController } from "./navbar.js";
-export { PanelShell } from "./panel-shell.js";
-export { pageNavigation } from "./page-navigation.js";
-export { masterDetail } from "./master-detail.js";
+import { h } from "../dom.js";
+
+/**
+ * MasterDetailLayout: patrón lista + detalle reutilizable. Dos columnas en
+ * escritorio y apilado en móvil/tablet. `class` permite ajustar el ancho de la
+ * columna maestra con una clase literal (Tailwind necesita la clase completa).
+ */
+export function masterDetail({ list, detail, class: extra = "" } = {}) {
+  return h(
+    "div",
+    {
+      class: `grid min-w-0 gap-6 lg:grid-cols-[300px_minmax(0,1fr)] ${extra}`.trim(),
+    },
+    h("div", { class: "min-w-0" }, list),
+    h("div", { class: "min-w-0" }, detail),
+  );
+}

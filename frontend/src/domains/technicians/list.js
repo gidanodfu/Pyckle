@@ -23,7 +23,7 @@ import { endpoints } from "../../api/endpoints.js";
 import { h } from "../../components/dom.js";
 import { locationFields } from "../../components/geo.js";
 import { icon } from "../../components/icons.js";
-import { Container } from "../../components/layout/index.js";
+import { PanelShell } from "../../components/layout/index.js";
 import { alert, button, card, emptyState, field, input, pageHeader, select, withBusy } from "../../components/ui/index.js";
 import { createLatestGuard } from "../../lib/latest.js";
 import { routes } from "../../lib/paths.js";
@@ -108,7 +108,7 @@ export async function TechniciansList() {
   });
 
   const notice = h("div", { class: "mt-4" });
-  const results = h("div", { class: "mt-6 grid gap-4 md:grid-cols-2" });
+  const results = h("div", { class: "grid gap-4 md:grid-cols-2" });
   const guard = createLatestGuard();
   const filterButton = button("Filtrar", { iconName: "filter", onClick: () => apply() });
   const clearButton = button("Limpiar filtros", { variant: "ghost", iconName: "x", onClick: () => clear() });
@@ -232,9 +232,9 @@ export async function TechniciansList() {
 
   await load(initial);
 
-  return Container(
-    pageHeader("Técnicos", "Técnicos listos para atender tu dispositivo en tu zona."),
-    h("div", { class: "mt-6" }, filters),
+  return PanelShell(
+    { header: pageHeader("Técnicos", "Técnicos listos para atender tu dispositivo en tu zona.") },
+    filters,
     notice,
     results,
   );

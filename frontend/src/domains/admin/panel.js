@@ -21,8 +21,8 @@
 import { api } from "../../api/client.js";
 import { endpoints } from "../../api/endpoints.js";
 import { formatDate, formatMoney, h } from "../../components/dom.js";
-import { Container } from "../../components/layout/index.js";
-import { alert, badge, button, card, emptyState, field, input, pageHeader, statCard, table, withBusy } from "../../components/ui/index.js";
+import { PanelShell } from "../../components/layout/index.js";
+import { alert, badge, button, card, emptyState, field, input, pageHeader, section, statCard, table, withBusy } from "../../components/ui/index.js";
 import { navigate } from "../../lib/navigation.js";
 import { routes } from "../../lib/paths.js";
 
@@ -146,11 +146,16 @@ export async function AdminPanel() {
     ),
   );
 
-  return Container(
-    pageHeader("Panel administrativo", "Estadísticas, moderación y administración del marketplace."),
+  return PanelShell(
+    {
+      header: pageHeader(
+        "Panel administrativo",
+        "Estadísticas, moderación y administración del marketplace.",
+      ),
+    },
     h(
       "div",
-      { class: "mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4" },
+      { class: "grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4" },
       statCard("Usuarios", stats.total_users, { iconName: "users" }),
       statCard("Técnicos", stats.total_technicians, { iconName: "wrench" }),
       statCard("Solicitudes abiertas", stats.open_requests, { accent: "text-warning", iconName: "clipboard-list" }),
@@ -158,59 +163,61 @@ export async function AdminPanel() {
     ),
     h(
       "div",
-      { class: "mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2" },
+      { class: "grid grid-cols-1 gap-6 lg:grid-cols-2" },
       card(
         h(
           "div",
           { class: "flex flex-wrap items-center justify-between gap-2" },
-          h("h2", { class: "text-lg font-semibold text-foreground" }, "Especialidades"),
+          h("h2", { class: "text-base font-semibold text-foreground" }, "Especialidades"),
           button("Usuarios", { variant: "ghost", iconName: "users", onClick: () => navigate(routes.adminUsers) }),
         ),
         createForm,
         specialtyList,
       ),
-      card(h("h2", { class: "text-lg font-semibold text-foreground" }, "Verificación de técnicos"), verifyBox),
+      card(h("h2", { class: "text-base font-semibold text-foreground" }, "Verificación de técnicos"), verifyBox),
     ),
-    h("h2", { class: "mt-8 mb-3 text-lg font-semibold text-foreground" }, "Solicitudes recientes"),
-    requests.items.length
-      ? table(
-          ["Título", "Cliente", { label: "Estado", align: "center" }, "Fecha", { label: "", align: "right" }],
-          requests.items.map((request) => [
-            request.title,
-            request.customer.full_name,
-            badge(request.status),
-            formatDate(request.created_at),
-            button("Ver", { variant: "outline", iconName: "eye", onClick: () => navigate(routes.requestDetail(request.id)) }),
-          ]),
-        )
-      : emptyState("Sin solicitudes", "No hay solicitudes registradas."),
-    h(
-      "div",
-      { class: "mt-8 mb-3 flex flex-wrap items-center justify-between gap-2" },
-      h("h2", { class: "text-lg font-semibold text-foreground" }, "Órdenes recientes"),
-      button("Ver todas", {
-        variant: "ghost",
-        iconName: "receipt-text",
-        onClick: () => navigate(routes.adminOrders),
-      }),
+    section(
+      { title: "Solicitudes recientes" },
+      requests.items.length
+        ? table(
+            ["Título", "Cliente", { label: "Estado", align: "center" }, "Fecha", { label: "", align: "right" }],
+            requests.items.map((request) => [
+              request.title,
+              request.customer.full_name,
+              badge(request.status),
+              formatDate(request.created_at),
+              button("Ver", { variant: "outline", iconName: "eye", onClick: () => navigate(routes.requestDetail(request.id)) }),
+            ]),
+          )
+        : emptyState("Sin solicitudes", "No hay solicitudes registradas."),
     ),
-    orders.items.length
-      ? table(
-          [
-            "Orden",
-            "Técnico",
-            { label: "Estado", align: "center" },
-            { label: "Total", align: "right" },
-            { label: "", align: "right" },
-          ],
-          orders.items.map((order) => [
-            order.id.slice(0, 8),
-            order.technician.full_name,
-            badge(order.status),
-            formatMoney(order.final_price),
-            button("Ver", { variant: "outline", iconName: "eye", onClick: () => navigate(routes.orderDetail(order.id)) }),
-          ]),
-        )
-      : emptyState("Sin órdenes", "No hay órdenes registradas."),
+    section(
+      {
+        title: "Órdenes recientes",
+        actions: button("Ver todas", {
+          variant: "ghost",
+          iconName: "receipt-text",
+          onClick: () => navigate(routes.adminOrders),
+        }),
+      },
+      orders.items.length
+        ? table(
+            [
+              "Orden",
+              "Técnico",
+              { label: "Estado", align: "center" },
+              { label: "Total", align: "right" },
+              { label: "", align: "right" },
+            ],
+            orders.items.map((order) => [
+              order.id.slice(0, 8),
+              order.technician.full_name,
+              badge(order.status),
+              formatMoney(order.final_price),
+              button("Ver", { variant: "outline", iconName: "eye", onClick: () => navigate(routes.orderDetail(order.id)) }),
+            ]),
+          )
+        : emptyState("Sin órdenes", "No hay órdenes registradas."),
+    ),
   );
 }

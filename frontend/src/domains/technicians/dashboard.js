@@ -20,16 +20,15 @@
 
 import { api } from "../../api/client.js";
 import { endpoints } from "../../api/endpoints.js";
-import { formatDate, formatMoney, h } from "../../components/dom.js";
-import { Container } from "../../components/layout/index.js";
+import { formatDate, h } from "../../components/dom.js";
+import { PanelShell } from "../../components/layout/index.js";
 import {
   alert,
   badge,
   button,
-  card,
   emptyState,
   pageHeader,
-  sectionTitle,
+  section,
   statCard,
 } from "../../components/ui/index.js";
 import { routes } from "../../lib/paths.js";
@@ -105,20 +104,22 @@ export async function TechnicianDashboard() {
       )
     : emptyState("Sin reparaciones", "Aún no tienes reparaciones registradas.");
 
-  return Container(
-    pageHeader(
-      `Panel técnico de ${me.user.full_name.split(" ")[0]}`,
-      "Gestiona tus reparaciones, cotizaciones e informes.",
-      button("Editar perfil", {
-        variant: "outline",
-        iconName: "pencil",
-        onClick: () => navigate(routes.profileTechnician),
-      }),
-    ),
-    technicianNav("resumen"),
+  return PanelShell(
+    {
+      header: pageHeader(
+        `Panel técnico de ${me.user.full_name.split(" ")[0]}`,
+        "Gestiona tus reparaciones, cotizaciones e informes.",
+        button("Editar perfil", {
+          variant: "outline",
+          iconName: "pencil",
+          onClick: () => navigate(routes.profileTechnician),
+        }),
+      ),
+      navigation: technicianNav("resumen"),
+    },
     h(
       "div",
-      { class: "mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4" },
+      { class: "grid gap-4 sm:grid-cols-2 lg:grid-cols-4" },
       statCard("Total reparaciones", summary.total, { iconName: "wrench" }),
       statCard("En proceso", inProgress, { accent: "text-info", iconName: "hammer" }),
       statCard("Esperando", waiting, { accent: "text-warning", iconName: "clock" }),
@@ -129,33 +130,34 @@ export async function TechnicianDashboard() {
     ),
     h(
       "div",
-      { class: "mt-8 grid gap-6 lg:grid-cols-2" },
-      card(
-        sectionTitle(
-          "Reparaciones por estado",
-          button("Ver todas", { variant: "ghost", onClick: () => navigate(routes.technicianRepairs) }),
-        ),
-        h("div", { class: "mt-4" }, statusCountsList(byStatus)),
+      { class: "grid gap-6 lg:grid-cols-2" },
+      section(
+        {
+          title: "Reparaciones por estado",
+          actions: button("Ver todas", {
+            variant: "ghost",
+            onClick: () => navigate(routes.technicianRepairs),
+          }),
+        },
+        statusCountsList(byStatus),
         summary.pending_price_changes
           ? h(
               "p",
-              { class: "mt-4 text-sm text-warning" },
+              { class: "text-sm text-warning" },
               `${summary.pending_price_changes} cambio(s) de precio esperando aprobación.`,
             )
           : null,
       ),
-      card(
-        sectionTitle("Reparaciones por categoría"),
-        h("div", { class: "mt-4" }, categoryList),
-      ),
+      section({ title: "Reparaciones por categoría" }, categoryList),
     ),
-    h(
-      "section",
-      { class: "mt-8 space-y-3" },
-      sectionTitle(
-        "Solicitudes compatibles",
-        button("Ver todas", { variant: "ghost", onClick: () => navigate(routes.requests) }),
-      ),
+    section(
+      {
+        title: "Solicitudes compatibles",
+        actions: button("Ver todas", {
+          variant: "ghost",
+          onClick: () => navigate(routes.requests),
+        }),
+      },
       available.expanded
         ? alert(
             `Mostrando solicitudes de ${SCOPE_LABELS[available.scope]} porque no hay en tu distrito.`,
@@ -171,18 +173,14 @@ export async function TechnicianDashboard() {
             { iconName: "clipboard-list" },
           ),
     ),
-    h(
-      "div",
-      { class: "mt-8" },
-      card(
-        h("h3", { class: "text-sm font-semibold text-foreground" }, "Tu zona de atención"),
-        h(
-          "p",
-          { class: "mt-1 text-sm text-foreground-secondary" },
-          [profile.district_name, profile.province_name, profile.department_name]
-            .filter(Boolean)
-            .join(", ") || "Configura tu ubicación para recibir solicitudes de tu zona.",
-        ),
+    section(
+      { title: "Tu zona de atención" },
+      h(
+        "p",
+        { class: "text-sm text-foreground-secondary" },
+        [profile.district_name, profile.province_name, profile.department_name]
+          .filter(Boolean)
+          .join(", ") || "Configura tu ubicación para recibir solicitudes de tu zona.",
       ),
     ),
   );

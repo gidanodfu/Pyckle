@@ -21,7 +21,7 @@
 import { api } from "../../api/client.js";
 import { endpoints } from "../../api/endpoints.js";
 import { formatDate, formatMoney, h } from "../../components/dom.js";
-import { Container } from "../../components/layout/index.js";
+import { PanelShell } from "../../components/layout/index.js";
 import { badge, button, card, emptyState, pageHeader } from "../../components/ui/index.js";
 import { routes } from "../../lib/paths.js";
 import { navigate } from "../../lib/navigation.js";
@@ -71,9 +71,11 @@ export async function TechnicianQuotations() {
         { iconName: "file-text" },
       );
 
-  return Container(
-    pageHeader("Mis cotizaciones", "Propuestas enviadas y su estado."),
-    technicianNav("quotations"),
-    h("div", { class: "mt-6" }, list),
+  return PanelShell(
+    {
+      header: pageHeader("Mis cotizaciones", "Propuestas enviadas y su estado."),
+      navigation: technicianNav("quotations"),
+    },
+    list,
   );
 }

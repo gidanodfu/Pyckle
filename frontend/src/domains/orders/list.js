@@ -21,7 +21,7 @@
 import { api } from "../../api/client.js";
 import { endpoints } from "../../api/endpoints.js";
 import { formatDateTime, formatMoney, h } from "../../components/dom.js";
-import { Container } from "../../components/layout/index.js";
+import { PanelShell } from "../../components/layout/index.js";
 import {
   alert,
   badge,
@@ -151,7 +151,7 @@ export async function ordersView({
   const fromDateInput = input({ name: "from_date", type: "date" });
   const toDateInput = input({ name: "to_date", type: "date" });
 
-  const results = h("div", { class: "mt-6" });
+  const results = h("div", { class: "min-w-0" });
   const filterButton = button("Filtrar", { iconName: "filter" });
   const clearButton = button("Limpiar", { variant: "ghost", iconName: "x" });
   let offset = 0;
@@ -303,8 +303,8 @@ export async function ordersView({
   });
   filterButton.addEventListener("click", () => load(0));
 
-  const view = Container(
-    pageHeader(title, subtitle),
+  const view = PanelShell(
+    { header: pageHeader(title, subtitle) },
     card(
       h(
         "div",
@@ -317,10 +317,10 @@ export async function ordersView({
         h("div", { class: "flex flex-wrap items-end gap-2 sm:col-span-2 lg:col-span-3" }, filterButton, clearButton),
       ),
     ),
+    results,
   );
 
   await load(0);
-  view.append(results);
   return view;
 }
 
