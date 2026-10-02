@@ -118,7 +118,7 @@ export function createNavbarController() {
     { class: "sticky top-0 z-40 bg-background/90 backdrop-blur" },
     h(
       "div",
-      { class: "mx-auto w-full max-w-6xl px-4 py-3" },
+      { class: "app-container py-3" },
       h(
         "div",
         {

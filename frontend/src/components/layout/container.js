@@ -21,5 +21,5 @@
 import { h } from "../dom.js";
 
 export function Container(...children) {
-  return h("div", { class: "mx-auto w-full max-w-6xl px-4 py-6" }, ...children);
+  return h("div", { class: "app-container py-6" }, ...children);
 }

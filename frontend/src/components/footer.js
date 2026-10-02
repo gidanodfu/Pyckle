@@ -43,45 +43,58 @@ function legalLink({ label, path, iconName }) {
 }
 
 /**
- * Footer global único de Pyckle. Se monta una sola vez en el App Shell
- * (`app/bootstrap.js`) y se comparte en todas las rutas.
+ * Footer global único de Pyckle. Es el extremo inferior del App Shell: usa el
+ * mismo contenedor (max-w-6xl + px-4), la misma familia de superficie, borde y
+ * radio que la Navbar. Se monta una sola vez en `app/bootstrap.js` y se
+ * comparte en todas las rutas (landing, cliente, técnico y admin).
  */
 export function createFooter() {
   return h(
     "footer",
-    { class: "mt-10 shrink-0 border-t border-border bg-surface" },
+    { class: "shrink-0 pb-6" },
     h(
       "div",
-      { class: "mx-auto max-w-6xl px-4 py-6" },
+      { class: "app-container" },
       h(
         "div",
-        { class: "flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between" },
+        { class: "rounded-xl border border-border bg-surface px-5 py-5 sm:px-6" },
         h(
           "div",
-          { class: "flex items-center gap-2.5" },
-          h("img", {
-            src: assets.logo64,
-            alt: "Pyckle",
-            width: 20,
-            height: 20,
-            class: "h-5 w-5 shrink-0 object-contain",
-          }),
+          { class: "grid gap-5 sm:grid-cols-[minmax(240px,0.7fr)_minmax(0,1.8fr)] sm:items-start" },
           h(
             "div",
-            { class: "leading-tight" },
-            h("p", { class: "text-xs text-muted" }, "Reparación de dispositivos en Perú"),
+            { class: "flex items-start gap-3" },
+            h("img", {
+              src: assets.logo64,
+              alt: "Pyckle",
+              width: 24,
+              height: 24,
+              class: "mt-0.5 h-6 w-6 shrink-0 object-contain",
+            }),
+            h(
+              "div",
+              { class: "leading-tight" },
+              h(
+                "p",
+                { class: "text-sm font-semibold text-foreground" },
+                "Reparación de dispositivos en Perú",
+              ),
+              h(
+                "p",
+                { class: "mt-1 max-w-xs text-xs text-muted" },
+                "Solicita, compara cotizaciones y sigue tu reparación de principio a fin.",
+              ),
+            ),
+          ),
+          h(
+            "nav",
+            {
+              class: "flex flex-wrap gap-x-6 gap-y-2",
+              "aria-label": "Enlaces legales",
+            },
+            LEGAL_LINKS.map((link) => legalLink(link)),
           ),
         ),
-        h("span", { class: "text-xs text-muted" }, String(new Date().getFullYear())),
-      ),
-      h(
-        "nav",
-        {
-          class:
-            "mt-4 flex flex-wrap justify-center gap-x-6 gap-y-2 border-t border-border-subtle pt-4",
-          "aria-label": "Enlaces legales",
-        },
-        LEGAL_LINKS.map((link) => legalLink(link)),
       ),
     ),
   );

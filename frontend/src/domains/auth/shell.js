@@ -27,11 +27,11 @@ export function authShell(title, subtitle, form) {
   return Container(
     h(
       "div",
-      { class: "mx-auto mt-6 w-full max-w-md" },
-      h("div", { class: "mb-6 flex justify-center" }, Logo({ size: 44 })),
+      { class: "mx-auto w-full max-w-md" },
+      h("div", { class: "mb-4 flex justify-center" }, Logo({ size: 44 })),
       h("h1", { class: "text-center text-2xl font-bold text-foreground" }, title),
       h("p", { class: "mt-1 text-center text-sm text-muted" }, subtitle),
-      h("div", { class: "mt-6" }, card(form)),
+      h("div", { class: "mt-5" }, card(form)),
     ),
   );
 }

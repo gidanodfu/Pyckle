@@ -18,9 +18,24 @@
  * along with Pyckle. If not, see <https://www.gnu.org/licenses/>.
  */
 
-export { Container } from "./container.js";
-export { createNavbarController } from "./navbar.js";
-export { PanelShell } from "./panel-shell.js";
-export { pageNavigation } from "./page-navigation.js";
-export { masterDetail } from "./master-detail.js";
-export { sectionShell } from "./section-shell.js";
+import { h } from "../dom.js";
+
+/**
+ * SectionShell: sección de página contenida como tarjeta. Alinea el contenido
+ * al mismo contenedor global que la Navbar y el Footer (max-w-6xl + px-4) y
+ * aporta la superficie (borde + radio + fondo). Su altura depende del contenido:
+ * no fija min-height ni paddings verticales grandes.
+ *
+ * Se usa para las secciones de la landing; los paneles usan PanelShell.
+ */
+export function sectionShell({ class: extra = "" } = {}, ...children) {
+  return h(
+    "section",
+    { class: extra },
+    h(
+      "div",
+      { class: "app-container" },
+      h("div", { class: "rounded-xl border border-border bg-surface p-5 sm:p-6" }, ...children),
+    ),
+  );
+}

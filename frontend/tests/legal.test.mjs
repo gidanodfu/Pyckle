@@ -96,7 +96,6 @@ test("el footer enlaza los 5 documentos y navega sin recarga", async () => {
   // La marca se muestra solo como isotipo: el wordmark "Pyckle" no es texto.
   assert.doesNotMatch(footer.textContent, /Pyckle/);
   assert.match(footer.textContent, /Reparación de dispositivos en Perú/);
-  assert.match(footer.textContent, new RegExp(String(new Date().getFullYear())));
 
   const terms = links.find((link) => link.textContent.includes("Términos"));
   click(terms);

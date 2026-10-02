@@ -22,6 +22,7 @@ import { api } from "../../api/client.js";
 import { endpoints } from "../../api/endpoints.js";
 import { h } from "../../components/dom.js";
 import { icon } from "../../components/icons.js";
+import { sectionShell } from "../../components/layout/index.js";
 import { button, card } from "../../components/ui/index.js";
 import { navigate } from "../../lib/navigation.js";
 import { isAuthenticated, store } from "../../state/store.js";
@@ -33,8 +34,6 @@ const STEPS = [
   ["Compara las cotizaciones", "Técnicos que trabajan con esa especialidad pueden enviarte diagnóstico inicial, precio estimado y tiempo de reparación.", "file-text"],
   ["Elige y sigue la reparación", "Acepta una cotización, conversa con el técnico y consulta el avance de tu orden hasta la entrega.", "hammer"],
 ];
-
-const SECTION_PAD = "py-10 md:py-12";
 
 const SPECIALTY_ICONS = {
   celulares: "smartphone",
@@ -49,24 +48,42 @@ const SPECIALTY_ICONS = {
 // Fallback para especialidades nuevas que aún no tengan icono asignado.
 const DEFAULT_SPECIALTY_ICON = "wrench";
 
-function specialtyTile(specialty) {
-  const iconName = SPECIALTY_ICONS[specialty.slug] || DEFAULT_SPECIALTY_ICON;
+function sectionHeading(title, description) {
   return h(
     "div",
-    {
-      class: "flex w-[calc(50%-0.375rem)] shrink-0 flex-col items-center justify-center gap-2 rounded-lg border border-border bg-surface px-3 py-5 text-center sm:w-[calc(33.333%-0.5rem)] lg:w-[calc(25%-0.75rem)]",
-    },
-    h("span", { class: "text-primary", "aria-hidden": "true" }, icon(iconName, { size: 22 })),
-    h("span", { class: "text-sm font-medium leading-snug text-foreground-secondary" }, specialty.name),
+    { class: "text-center" },
+    h("h2", { class: "text-2xl font-bold tracking-tight text-foreground md:text-3xl" }, title),
+    description
+      ? h(
+          "p",
+          { class: "mx-auto mt-2 max-w-2xl text-sm text-foreground-secondary md:text-base" },
+          description,
+        )
+      : null,
   );
 }
 
-/** Contenedor de sección alineado al mismo eje del Hero (max-w-6xl + px-4). */
-function Section({ class: extra = "", pad = SECTION_PAD } = {}, ...children) {
-  return h(
-    "section",
-    { class: extra },
-    h("div", { class: `mx-auto w-full max-w-6xl px-4 ${pad}`.trim() }, ...children),
+function stepCard([title, text, iconName], index) {
+  return card(
+    h(
+      "span",
+      { class: "flex h-11 w-11 items-center justify-center rounded-md bg-primary-tint text-primary" },
+      icon(iconName, { size: 20 }),
+    ),
+    h("h3", { class: "mt-3 text-base font-semibold text-foreground" }, `${index + 1}. ${title}`),
+    h("p", { class: "mt-2 text-sm leading-relaxed text-foreground-secondary" }, text),
+  );
+}
+
+function specialtyCard(specialty) {
+  const iconName = SPECIALTY_ICONS[specialty.slug] || DEFAULT_SPECIALTY_ICON;
+  return card(
+    h(
+      "div",
+      { class: "flex flex-col items-center gap-2 text-center" },
+      h("span", { class: "text-primary", "aria-hidden": "true" }, icon(iconName, { size: 22 })),
+      h("span", { class: "text-sm font-medium leading-snug text-foreground-secondary" }, specialty.name),
+    ),
   );
 }
 
@@ -78,15 +95,14 @@ export async function Landing() {
     specialties = [];
   }
 
-  const hero = h(
-    "section",
-    { class: "border-b border-border bg-surface" },
+  const hero = sectionShell(
+    {},
     h(
       "div",
-      { class: "mx-auto grid max-w-6xl gap-10 px-4 py-16 md:grid-cols-2 md:py-24" },
+      { class: "grid gap-8 md:grid-cols-2 md:items-center" },
       h(
         "div",
-        { class: "space-y-6" },
+        { class: "space-y-5" },
         h(
           "span",
           {
@@ -97,14 +113,14 @@ export async function Landing() {
         ),
         h(
           "h1",
-          { class: "text-4xl font-extrabold leading-tight text-foreground md:text-5xl" },
+          { class: "text-3xl font-extrabold leading-tight text-foreground md:text-4xl" },
           "Tu equipo falla.",
           h("br"),
           "Encuentra quién lo repare.",
         ),
         h(
           "p",
-          { class: "max-w-lg text-lg text-foreground-secondary" },
+          { class: "max-w-lg text-base text-foreground-secondary md:text-lg" },
           "Publica la falla de tu dispositivo, recibe cotizaciones de técnicos verificados y elige cómo y dónde repararlo.",
         ),
         h(
@@ -120,16 +136,12 @@ export async function Landing() {
       ),
       h(
         "div",
-        { class: "grid gap-4 self-center" },
-        h(
-          "div",
-          { class: "rounded-lg border border-border bg-surface-elevated p-5" },
+        { class: "grid gap-4" },
+        card(
           h("p", { class: "text-3xl font-bold tabular-nums text-foreground" }, String(specialties.length)),
           h("p", { class: "text-sm text-muted" }, "Especialidades disponibles"),
         ),
-        h(
-          "div",
-          { class: "rounded-lg border border-border bg-surface-elevated p-5" },
+        card(
           h("p", { class: "text-sm font-semibold text-foreground" }, "Todo queda registrado"),
           h(
             "p",
@@ -141,60 +153,47 @@ export async function Landing() {
     ),
   );
 
-  const steps = Section(
+  const steps = sectionShell(
     {},
-    h("h2", { class: "text-center text-3xl font-bold tracking-tight text-foreground" }, "¿Cómo funciona?"),
+    sectionHeading("¿Cómo funciona?"),
     h(
       "div",
-      { class: "mt-8 grid gap-5 sm:grid-cols-2 md:gap-6 lg:grid-cols-3" },
-      STEPS.map(([title, text, iconName], index) =>
-        card(
-          h(
-            "span",
-            { class: "flex h-11 w-11 items-center justify-center rounded-md bg-primary-tint text-primary" },
-            icon(iconName, { size: 20 }),
-          ),
-          h("h3", { class: "mt-3 text-lg font-semibold text-foreground" }, `${index + 1}. ${title}`),
-          h("p", { class: "mt-2 text-sm leading-relaxed text-foreground-secondary md:text-base" }, text),
-        ),
-      ),
+      { class: "mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" },
+      STEPS.map(stepCard),
     ),
   );
 
-  const specialtiesSection = Section(
-    { class: "bg-surface" },
-    h("h2", { class: "text-center text-3xl font-bold tracking-tight text-foreground" }, "Especialidades disponibles"),
-    h(
-      "p",
-      { class: "mx-auto mt-3 max-w-2xl text-center text-sm text-foreground-secondary md:text-base" },
+  const specialtiesSection = sectionShell(
+    {},
+    sectionHeading(
+      "Especialidades disponibles",
       "Selecciona el tipo de equipo y encuentra técnicos que trabajan con él.",
     ),
     h(
       "div",
-      { class: "mt-6 flex flex-wrap justify-center gap-3 md:mt-8 lg:gap-4" },
-      specialties.map((specialty) => specialtyTile(specialty)),
+      { class: "mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4" },
+      specialties.map(specialtyCard),
     ),
   );
 
-  // CTA final: sin padding inferior extra porque el footer ya aporta su margen.
-  const cta = Section(
-    { pad: "pt-10 md:pt-12 pb-2 md:pb-4" },
+  const cta = sectionShell(
+    {},
     h(
       "div",
-      { class: "mx-auto max-w-2xl text-center" },
-      h("h2", { class: "text-3xl font-bold tracking-tight text-foreground" }, "¿Reparas dispositivos?"),
+      { class: "mx-auto max-w-2xl py-2 text-center" },
+      h("h2", { class: "text-2xl font-bold tracking-tight text-foreground md:text-3xl" }, "¿Reparas dispositivos?"),
       h(
         "p",
-        { class: "mt-3 text-base text-foreground-secondary md:text-lg" },
+        { class: "mx-auto mt-2 max-w-2xl text-sm text-foreground-secondary md:text-base" },
         "Crea tu perfil, indica qué equipos reparas y cómo atiendes, y recibe solicitudes que coincidan con tus especialidades.",
       ),
       h(
         "div",
-        { class: "mt-6 flex justify-center" },
+        { class: "mt-5 flex justify-center" },
         button("Quiero ser técnico", { iconName: "wrench", onClick: () => navigate(routes.registerTechnician) }),
       ),
     ),
   );
 
-  return h("div", {}, hero, steps, specialtiesSection, cta);
+  return h("div", { class: "flex flex-col gap-4 py-6" }, hero, steps, specialtiesSection, cta);
 }

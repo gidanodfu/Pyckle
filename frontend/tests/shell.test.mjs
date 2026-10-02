@@ -341,7 +341,7 @@ test("la sección de especialidades muestra 7 categorías informativas con icono
     /Selecciona el tipo de equipo y encuentra técnicos que trabajan con él\./,
   );
 
-  const grid = spec.querySelector("div.flex.flex-wrap.justify-center");
+  const grid = spec.querySelector("div.grid");
   const tiles = [...grid.children];
   assert.equal(tiles.length, 7);
   assert.deepEqual(
